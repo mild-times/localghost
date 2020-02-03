@@ -1,0 +1,27 @@
+[package]
+version = "0.0.0"
+authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
+categories = []
+description = "API bindings for Web APIs"
+documentation = "https://docs.rs/coast"
+edition = "2018"
+keywords = []
+license = "MIT OR Apache-2.0"
+name = "coast"
+readme = "README.md"
+repository = "https://github.com/yoshuawuyts/coast"
+
+[dependencies]
+wasm-bindgen = "0.2.58"
+
+[dependencies.web-sys]
+version = "0.3.35"
+features = [
+    "AddEventListenerOptions",
+    "Event",
+    "EventTarget",
+]
+
+[dev-dependencies]
+
+[features]
