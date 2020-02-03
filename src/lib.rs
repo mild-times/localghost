@@ -10,7 +10,10 @@
 #![deny(missing_debug_implementations, nonstandard_style)]
 #![warn(missing_docs, missing_doc_code_examples, unreachable_pub)]
 
+pub mod events;
+
+mod document_ready;
+
 #[doc(inline)]
 pub use web_sys as sys;
-
-pub mod events;
+pub use document_ready::ready;

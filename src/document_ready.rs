@@ -3,7 +3,7 @@
 #![warn(missing_docs, missing_doc_code_examples, unreachable_pub)]
 
 use futures_channel::oneshot::channel;
-use gloo_events::EventListener;
+use crate::events::EventListener;
 use std::time::Duration;
 
 /// Wait for the DOM to be loaded.
@@ -34,7 +34,7 @@ pub async fn ready() {
         }
         _ => {
             let (sender, receiver) = channel();
-            let _listener = EventListener::once(&document, "DOMContentLoaded", move |_| {
+            let _listener = EventListener::listen_once(&document, "DOMContentLoaded", move |_| {
                 sender.send(()).unwrap();
             });
             receiver.await.unwrap();
