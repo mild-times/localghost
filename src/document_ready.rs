@@ -2,10 +2,12 @@
 #![deny(missing_debug_implementations, nonstandard_style)]
 #![warn(missing_docs, missing_doc_code_examples, unreachable_pub)]
 
-use futures_channel::oneshot::channel;
-use std::time::Duration;
-
+use crate::prelude::*;
 use crate::events::EventTarget;
+
+use futures_channel::oneshot::channel;
+
+use std::time::Duration;
 
 /// Wait for the DOM to be loaded.
 ///
@@ -26,10 +28,7 @@ use crate::events::EventTarget;
 /// ```
 
 pub async fn ready() {
-    let document = web_sys::window()
-        .expect("Window not found")
-        .document()
-        .unwrap();
+    let document = crate::window().document().unwrap_throw();
 
     match document.ready_state().as_str() {
         "complete" | "interactive" => {
