@@ -3,22 +3,25 @@
 #![warn(missing_docs, missing_doc_code_examples, unreachable_pub)]
 
 use futures_channel::oneshot::channel;
-use crate::events::EventListener;
 use std::time::Duration;
+
+use crate::events::EventTarget;
 
 /// Wait for the DOM to be loaded.
 ///
 /// # Examples
 ///
-/// ```
+/// ```no_run
 /// use wasm_bindgen::prelude::*;
 /// use coast::ready;
 ///
 /// #[wasm_bindgen(start)]
 /// pub fn main() {
-///     println!("waiting on document to load");
-///     ready().await;
-///     println!("document loaded!");
+///     coast::task::spawn_local(async {
+///         println!("waiting on document to load");
+///         ready().await;
+///         println!("document loaded!");
+///     })
 /// }
 /// ```
 
@@ -34,7 +37,7 @@ pub async fn ready() {
         }
         _ => {
             let (sender, receiver) = channel();
-            let _listener = EventListener::listen_once(&document, "DOMContentLoaded", move |_| {
+            let _listener = document.once("DOMContentLoaded", move |_| {
                 sender.send(()).unwrap();
             });
             receiver.await.unwrap();

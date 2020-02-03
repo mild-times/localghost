@@ -3,7 +3,11 @@
 use std::borrow::Cow;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::{JsCast, UnwrapThrowExt};
-use web_sys::{AddEventListenerOptions, Event, EventTarget};
+use web_sys::{AddEventListenerOptions, Event};
+
+mod event_target;
+
+pub use event_target::EventTarget;
 
 /// Specifies the phase during which the event listener is run.
 ///
@@ -68,12 +72,12 @@ impl Builder {
     }
 
     /// Register an event listener.
-    pub fn listen<S, F>(self, target: &EventTarget, event_type: S, callback: F) -> EventListener
+    pub fn listen<S, F>(self, target: &web_sys::EventTarget, event_type: S, f: F) -> EventListener
     where
         S: Into<Cow<'static, str>>,
         F: FnMut(&Event) + 'static,
     {
-        let callback = Closure::wrap(Box::new(callback) as Box<dyn FnMut(&Event)>);
+        let f = Closure::wrap(Box::new(f) as Box<dyn FnMut(&Event)>);
         let event_type = event_type.into();
 
         let mut options = AddEventListenerOptions::new();
@@ -84,7 +88,7 @@ impl Builder {
         target
             .add_event_listener_with_callback_and_add_event_listener_options(
                 &event_type,
-                callback.as_ref().unchecked_ref(),
+                f.as_ref().unchecked_ref(),
                 &options,
             )
             .unwrap_throw();
@@ -92,18 +96,18 @@ impl Builder {
         EventListener {
             target: target.clone(),
             event_type,
-            callback: Some(callback),
+            f: Some(f),
             phase: self.phase,
         }
     }
 
     /// Register an event listener that will be called at most once.
-    pub fn listen_once<S, F>(target: &EventTarget, event_type: S, callback: F) -> EventListener
+    pub fn listen_once<S, F>(target: &web_sys::EventTarget, event_type: S, f: F) -> EventListener
     where
         S: Into<Cow<'static, str>>,
         F: FnOnce(&Event) + 'static,
     {
-        let callback = Closure::once(callback);
+        let f = Closure::once(f);
         let phase = EventPhase::Bubble;
         let event_type = event_type.into();
 
@@ -113,7 +117,7 @@ impl Builder {
         target
             .add_event_listener_with_callback_and_add_event_listener_options(
                 &event_type,
-                callback.as_ref().unchecked_ref(),
+                f.as_ref().unchecked_ref(),
                 &options,
             )
             .unwrap_throw();
@@ -121,7 +125,7 @@ impl Builder {
         EventListener {
             target: target.clone(),
             event_type,
-            callback: Some(callback),
+            f: Some(f),
             phase,
         }
     }
@@ -131,31 +135,31 @@ impl Builder {
 #[derive(Debug)]
 #[must_use = "Event listener unsubscribes on drop"]
 pub struct EventListener {
-    target: EventTarget,
+    target: web_sys::EventTarget,
     event_type: Cow<'static, str>,
-    callback: Option<Closure<dyn FnMut(&Event)>>,
+    f: Option<Closure<dyn FnMut(&Event)>>,
     phase: EventPhase,
 }
 
 impl EventListener {
     /// Register an event listener.
     #[inline]
-    pub fn listen<S, F>(target: &EventTarget, event_type: S, callback: F) -> Self
+    pub fn listen<S, F>(target: &web_sys::EventTarget, event_type: S, f: F) -> Self
     where
         S: Into<Cow<'static, str>>,
         F: FnMut(&Event) + 'static,
     {
-        Builder::new().listen(target, event_type, callback)
+        Builder::new().listen(target, event_type, f)
     }
 
     /// Register an event listener that will be called at most once.
     #[inline]
-    pub fn listen_once<S, F>(target: &EventTarget, event_type: S, callback: F) -> Self
+    pub fn listen_once<S, F>(target: &web_sys::EventTarget, event_type: S, f: F) -> Self
     where
         S: Into<Cow<'static, str>>,
         F: FnOnce(&Event) + 'static,
     {
-        let callback = Closure::once(callback);
+        let f = Closure::once(f);
         let phase = EventPhase::Bubble;
         let event_type = event_type.into();
 
@@ -165,7 +169,7 @@ impl EventListener {
         target
             .add_event_listener_with_callback_and_add_event_listener_options(
                 &event_type,
-                callback.as_ref().unchecked_ref(),
+                f.as_ref().unchecked_ref(),
                 &options,
             )
             .unwrap_throw();
@@ -173,7 +177,7 @@ impl EventListener {
         Self {
             target: target.clone(),
             event_type,
-            callback: Some(callback),
+            f: Some(f),
             phase,
         }
     }
@@ -185,13 +189,13 @@ impl EventListener {
     #[inline]
     pub fn forget(mut self) {
         // take() is necessary because of Rust's restrictions about Drop
-        // This will never panic, because `callback` is always `Some`
-        self.callback.take().unwrap_throw().forget()
+        // This will never panic, because `f` is always `Some`
+        self.f.take().unwrap_throw().forget()
     }
 
     /// Returns the `EventTarget`.
     #[inline]
-    pub fn target(&self) -> &EventTarget {
+    pub fn target(&self) -> &web_sys::EventTarget {
         &self.target
     }
 
@@ -216,11 +220,11 @@ impl Drop for EventListener {
     #[inline]
     fn drop(&mut self) {
         // This will only be None if forget() was called
-        if let Some(callback) = &self.callback {
+        if let Some(f) = &self.f {
             self.target
                 .remove_event_listener_with_callback_and_bool(
                     self.event_type(),
-                    callback.as_ref().unchecked_ref(),
+                    f.as_ref().unchecked_ref(),
                     self.phase.is_capture(),
                 )
                 .unwrap_throw();
