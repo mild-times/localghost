@@ -27,6 +27,7 @@ features = [
     "Event",
     "EventTarget",
     "History",
+    "Navigator",
     "Window",
 ]
 

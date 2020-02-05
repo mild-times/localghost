@@ -24,6 +24,7 @@
 pub mod events;
 pub mod prelude;
 pub mod task;
+pub mod net;
 
 mod document_ready;
 mod history;
