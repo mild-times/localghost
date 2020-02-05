@@ -7,8 +7,6 @@ use crate::prelude::*;
 
 use futures_channel::oneshot::channel;
 
-use std::time::Duration;
-
 /// Wait for the DOM to be loaded.
 ///
 /// # Examples
@@ -31,9 +29,7 @@ pub async fn ready() {
     let document = crate::window().document().unwrap_throw();
 
     match document.ready_state().as_str() {
-        "complete" | "interactive" => {
-            futures_timer::Delay::new(Duration::from_secs(0)).await;
-        }
+        "complete" | "interactive" => return,
         _ => {
             let (sender, receiver) = channel();
             let _listener = document.once("DOMContentLoaded", move |_| {
