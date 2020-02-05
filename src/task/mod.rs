@@ -79,7 +79,7 @@ impl<T: Send + Sync + 'static> AnimationLoop<T> {
     }
 }
 
-impl<T> Debug for AnimationLoop<T> {
+impl<T: Send + Sync + 'static> Debug for AnimationLoop<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("AnimationLoop")
             .field("f", &"FnMut(T)")
