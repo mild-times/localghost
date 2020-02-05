@@ -56,7 +56,7 @@ impl Builder {
     }
 
     /// Set the `EventPhase` during which the event should be triggered.
-    /// 
+    ///
     /// Defaults to `EventPhase::Bubble`.
     pub fn phase(mut self, phase: EventPhase) -> Self {
         self.phase = phase;
@@ -64,7 +64,7 @@ impl Builder {
     }
 
     /// Set whether the listener should be `passive`.
-    /// 
+    ///
     /// Defaults to `true`.
     pub fn passive(mut self, passive: bool) -> Self {
         self.passive = passive;

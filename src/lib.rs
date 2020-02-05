@@ -22,15 +22,13 @@
 #![warn(missing_docs, missing_doc_code_examples, unreachable_pub)]
 
 pub mod events;
-pub mod task;
 pub mod prelude;
+pub mod task;
 
 mod document_ready;
-mod window;
 mod history;
+mod window;
 
-#[doc(inline)]
-pub use web_sys as sys;
 pub use document_ready::ready;
-pub use window::window;
 pub use history::History;
+pub use window::window;

@@ -2,8 +2,8 @@
 #![deny(missing_debug_implementations, nonstandard_style)]
 #![warn(missing_docs, missing_doc_code_examples, unreachable_pub)]
 
-use crate::prelude::*;
 use crate::events::EventTarget;
+use crate::prelude::*;
 
 use futures_channel::oneshot::channel;
 
