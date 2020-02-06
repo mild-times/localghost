@@ -22,9 +22,10 @@
 #![warn(missing_docs, missing_doc_code_examples, unreachable_pub)]
 
 pub mod events;
+pub mod log;
+pub mod net;
 pub mod prelude;
 pub mod task;
-pub mod net;
 
 mod document_ready;
 mod history;

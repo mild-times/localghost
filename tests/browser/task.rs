@@ -1,5 +1,5 @@
+use std::sync::{Arc, Mutex};
 use wasm_bindgen_test::*;
-use std::sync::{Mutex, Arc};
 
 use coast::task::AnimationLoop;
 
@@ -19,9 +19,7 @@ async fn animation_loop() {
 
 #[wasm_bindgen_test]
 async fn spawn_local() {
-    let handle = coast::task::spawn_local(async move {
-        12_u8
-    });
+    let handle = coast::task::spawn_local(async move { 12_u8 });
     assert_eq!(handle.await, 12);
 }
 

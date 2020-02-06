@@ -1,8 +1,8 @@
-use futures_channel::oneshot::{Receiver, channel};
+use futures_channel::oneshot::{channel, Receiver};
 
 use std::future::Future;
-use std::task::{Context, Poll};
 use std::pin::Pin;
+use std::task::{Context, Poll};
 
 /// Runs a Rust `Future` on the current thread.
 ///

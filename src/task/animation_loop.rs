@@ -1,13 +1,13 @@
 use futures_channel::oneshot::{channel, Sender};
 
-use std::future::Future;
 use std::fmt::{self, Debug};
-use std::sync::{Mutex, Arc};
+use std::future::Future;
+use std::sync::{Arc, Mutex};
 
 use crate::task::spawn_local;
 
 /// An animation frame loop.
-/// 
+///
 /// # Example
 ///
 /// ```no_run
