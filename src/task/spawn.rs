@@ -1,6 +1,4 @@
 use futures_channel::oneshot::{Receiver, channel};
-use wasm_bindgen::closure::Closure;
-use wasm_bindgen::JsCast;
 
 use std::future::Future;
 use std::task::{Context, Poll};
@@ -39,15 +37,6 @@ where
     JoinHandle { receiver }
 }
 
-/// Task priority.
-#[derive(Debug)]
-pub enum Priority {
-    /// Spawns a task on the microqueue.
-    High,
-    /// Spawns a task when the browser has idle time.
-    Low,
-}
-
 /// A handle that awaits the result of a [`spawn`]ed future.
 ///
 /// [`spawn`]: fn.spawn.html
@@ -63,24 +52,25 @@ impl<T> Future for JoinHandle<T> {
         match Pin::new(&mut self.receiver).poll(cx) {
             Poll::Pending => Poll::Pending,
             Poll::Ready(Ok(t)) => Poll::Ready(t),
-            Poll::Ready(Err(_)) => unreachable!(),
+            Poll::Ready(Err(_)) => panic!("error in JoinHandle"),
         }
     }
 }
 
-/// Spawn a task that runs when the event loop is idle.
-#[inline]
-pub fn spawn_idle<F, T>(f: F) -> JoinHandle<T>
-where
-    F: FnOnce() -> T + 'static,
-    T: 'static + Send,
-{
-    let (sender, receiver) = channel();
-    let f2 = Closure::once(Box::new(move || {
-        let t = f();
-        let _ = sender.send(t);
-    }) as Box<dyn FnOnce()>);
+// /// Spawn a task that runs when the event loop is idle.
+// #[inline]
+// pub fn spawn_idle<F, T>(f: F) -> JoinHandle<T>
+// where
+//     F: FnOnce() -> T + 'static,
+//     T: 'static + Send,
+// {
+//     let (sender, receiver) = channel();
+//     let f2 = Closure::once(Box::new(move || {
+//         let t = f();
+//         let _ = sender.send(t);
+//     }) as Box<dyn FnOnce()>);
 
-    let _ = crate::window().request_idle_callback(f2.as_ref().unchecked_ref());
-    JoinHandle { receiver }
-}
+//     web_sys::console::time_log();
+//     let _ = crate::window().request_idle_callback(f2.as_ref().unchecked_ref());
+//     JoinHandle { receiver }
+// }

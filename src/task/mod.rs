@@ -4,4 +4,4 @@ mod animation_loop;
 mod spawn;
 
 pub use animation_loop::AnimationLoop;
-pub use spawn::{spawn_local, spawn_idle, JoinHandle, Priority};
+pub use spawn::{spawn_local, JoinHandle};
