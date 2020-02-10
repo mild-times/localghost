@@ -20,6 +20,8 @@ log = { version = "0.4.8", features = ["kv_unstable", "std"] }
 wasm-bindgen = { version = "0.2.58", features = ["serde-serialize"] }
 wasm-bindgen-futures = "0.4.8"
 wasm-bindgen-test = "0.3.8"
+async-std = {version = "1.5.0", features = ["unstable"] }
+# send_wrapper = "0.4.0"
 
 [dependencies.web-sys]
 version = "0.3.35"
@@ -29,8 +31,12 @@ features = [
     "Document",
     "Event",
     "EventTarget",
+    "Headers",
     "History",
     "Navigator",
+    "Request",
+    "RequestInit",
+    "Response",
     "Window",
 ]
 

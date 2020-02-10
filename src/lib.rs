@@ -4,16 +4,14 @@
 //!
 //!
 //! ```no_run
-//! use wasm_bindgen::prelude::*;
-//! use coast::ready;
+//! use coast::prelude::*;
+//! use coast::{ready, net};
 //!
-//! #[wasm_bindgen(start)]
-//! pub fn main() {
-//!     coast::task::spawn_local(async {
-//!         println!("waiting on document to load");
-//!         ready().await;
-//!         println!("document loaded!");
-//!     })
+//! #[coast::main]
+//! async fn main() {
+//!     ready().await;
+//!     let res = net::Request::new("GET", "https://example.com").send().await;
+//!     println!("responded with {:?}", res.status_code());
 //! }
 //! ```
 
