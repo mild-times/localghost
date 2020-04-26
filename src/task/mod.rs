@@ -3,5 +3,5 @@
 mod animation_loop;
 mod spawn;
 
-pub use animation_loop::AnimationLoop;
+pub use animation_loop::{request_animation_frame, AnimationFrameHandle, AnimationLoop};
 pub use spawn::{spawn_local, JoinHandle};

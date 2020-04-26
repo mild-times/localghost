@@ -17,14 +17,15 @@ futures-timer = "3.0.1"
 js-sys = "0.3.35"
 kv-log-macro = "1.0.4"
 log = { version = "0.4.8", features = ["kv_unstable", "std"] }
-wasm-bindgen = { version = "0.2.58", features = ["serde-serialize"] }
-wasm-bindgen-futures = "0.4.8"
-wasm-bindgen-test = "0.3.8"
-async-std = {version = "1.5.0", features = ["unstable"] }
+wasm-bindgen = { version = "0.2.60", features = ["serde-serialize"] }
+wasm-bindgen-futures = "0.4.10"
+wasm-bindgen-test = "0.3.10"
+async-std = {path = "../async-std", features = ["unstable"] }
 # send_wrapper = "0.4.0"
+coast-macros = { path = "./coast-macros" }
 
 [dependencies.web-sys]
-version = "0.3.35"
+version = "0.3.37"
 features = [
     "AddEventListenerOptions",
     "console",

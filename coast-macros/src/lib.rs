@@ -4,8 +4,6 @@
 #![deny(missing_debug_implementations, nonstandard_style)]
 #![recursion_limit = "512"]
 
-extern crate proc_macro;
-
 use proc_macro::TokenStream;
 use quote::{quote, quote_spanned};
 use syn::spanned::Spanned;
@@ -50,15 +48,20 @@ pub fn main(_attr: TokenStream, item: TokenStream) -> TokenStream {
 
     let result = quote! {
         #[wasm_bindgen(start)]
-        pub fn main() #ret {
+        pub fn main() {
+            // This better provides error messages in debug mode.
+            // It's disabled in release mode so it doesn't bloat up the file size.
+            #[cfg(debug_assertions)]
+            console_error_panic_hook::set_once();
+
             #(#attrs)*
             async fn main(#inputs) #ret {
                 #body
             }
 
-            wasm_bindgen_futures::spawn_local(async {
-                main().await#end;
-            })
+            async_std::spawn_local(async {
+                main().await#end
+            });
         }
 
     };

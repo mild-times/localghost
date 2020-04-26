@@ -29,6 +29,7 @@ mod document_ready;
 mod history;
 mod window;
 
+pub use coast_macros::main;
 pub use document_ready::ready;
 pub use history::History;
 pub use window::window;

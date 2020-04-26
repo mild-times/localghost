@@ -1,9 +1,3 @@
-use futures_channel::oneshot::{channel, Receiver};
-
-use std::future::Future;
-use std::pin::Pin;
-use std::task::{Context, Poll};
-
 /// Runs a Rust `Future` on the current thread.
 ///
 /// The `future` must be `'static` because it will be scheduled
@@ -21,41 +15,9 @@ use std::task::{Context, Poll};
 /// If the `future` provided panics then the returned `Promise` **will not
 /// resolve**. Instead it will be a leaked promise. This is an unfortunate
 /// limitation of wasm currently that's hoped to be fixed one day!
-#[inline]
-pub fn spawn_local<F, T>(future: F) -> JoinHandle<T>
-where
-    F: Future<Output = T> + 'static,
-    T: 'static,
-{
-    let (sender, receiver) = channel();
-    let fut = async move {
-        let t = future.await;
-        let _ = sender.send(t);
-    };
+pub use async_std::task::spawn_local;
 
-    wasm_bindgen_futures::spawn_local(fut);
-    JoinHandle { receiver }
-}
-
-/// A handle that awaits the result of a [`spawn`]ed future.
-///
-/// [`spawn`]: fn.spawn.html
-#[derive(Debug)]
-pub struct JoinHandle<T> {
-    pub(crate) receiver: Receiver<T>,
-}
-
-impl<T> Future for JoinHandle<T> {
-    type Output = T;
-
-    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
-        match Pin::new(&mut self.receiver).poll(cx) {
-            Poll::Pending => Poll::Pending,
-            Poll::Ready(Ok(t)) => Poll::Ready(t),
-            Poll::Ready(Err(_)) => panic!("error in JoinHandle"),
-        }
-    }
-}
+pub use async_std::task::JoinHandle;
 
 // /// Spawn a task that runs when the event loop is idle.
 // #[inline]
