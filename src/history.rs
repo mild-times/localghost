@@ -8,6 +8,11 @@ use crate::prelude::*;
 use futures_channel::oneshot::channel;
 use wasm_bindgen::JsValue;
 
+use std::cell::RefCell;
+use std::sync::atomic::{AtomicBool, Ordering};
+
+const EXISTS: RefCell<AtomicBool> = RefCell::new(AtomicBool::new(false));
+
 /// The Web History API.
 ///
 /// This provides a structured view onto the browser's history stack.
@@ -42,6 +47,14 @@ impl History {
     ///
     /// The cursor is initialized at the end of the stack.
     pub fn new() -> Self {
+        assert_eq!(
+            EXISTS
+                .borrow()
+                .compare_and_swap(false, true, Ordering::SeqCst),
+            false,
+            "Only one History instance can be created per application"
+        );
+
         Self {
             inner: crate::window().history().unwrap_throw(),
         }
@@ -114,4 +127,10 @@ impl History {
     }
 }
 
+impl Drop for History {
+    fn drop(&mut self) {
+        // Allow a new instance to be created once this no longer exists.
+        EXISTS.borrow().store(false, Ordering::SeqCst);
+    }
+}
 // TODO: impl Stream & DoubleEndedStream for History
