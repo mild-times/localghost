@@ -1,64 +1,84 @@
-use futures_channel::oneshot::{channel, Sender};
+use async_std::stream::Stream;
+use futures_channel::oneshot::{channel, Receiver};
+use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsCast;
 
 use std::fmt::{self, Debug};
 use std::future::Future;
-use std::sync::{Arc, Mutex};
-
-use crate::task::spawn_local;
+use std::pin::Pin;
+use std::task::{Context, Poll};
 
 /// An animation frame loop.
 ///
 /// # Example
 ///
 /// ```no_run
-/// let mut animator = AnimationLoop::new(|s| async move {
-///     s.send(()).await;
-/// });
+/// // Create an animator that will loop for 60 frames.
+/// let mut animator = AnimationLoop::new().take(60);
 ///
-/// while let Some(_) in receiver.next().await {
-///     animator.render(sender.clone()).await;
+/// let mut counter = 0;
+/// while let Some(frame) in animator.next().await {
+///     println!("frame no {}", counter);
+///     counter += 1;
 /// }
 /// ```
-pub struct AnimationLoop<T: Send + Sync + 'static> {
-    f: Box<dyn Fn(Sender<()>, T)>,
+pub struct AnimationLoop {
+    receiver: Option<Receiver<()>>,
+    f: Option<Closure<dyn std::ops::FnMut()>>,
+    id: Option<i32>,
 }
 
-impl<T: Send + Sync + 'static> AnimationLoop<T> {
-    /// Create a new `RequestAnimationFrame` loop.
-    pub fn new<F, Fut>(f: F) -> Self
-    where
-        Fut: Future<Output = ()> + 'static,
-        F: Fn(T) -> Fut + 'static,
-    {
-        let f = Arc::new(Mutex::new(f));
-
+impl AnimationLoop {
+    /// Create a new instance of `AnimationLoop`.
+    pub fn new() -> Self {
         Self {
-            f: Box::new(move |sender, t| {
-                let f = f.clone();
-                spawn_local(async move {
-                    (f.lock().unwrap())(t).await;
-                    sender.send(()).unwrap();
-                });
-            }),
+            receiver: None,
+            id: None,
+            f: None,
         }
     }
+}
 
-    /// Schedule the the animation loop to render on the next tick of the event
-    /// loop.
-    ///
-    /// This function will wait until the frame has finished rendering. This can
-    /// be run in a loop to render frames as they come in.
-    pub async fn render(&mut self, value: T) {
-        let (sender, receiver) = channel();
-        (self.f)(sender, value);
-        receiver.await.unwrap();
+impl Stream for AnimationLoop {
+    type Item = ();
+    fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        if let None = self.receiver {
+            let window = crate::window();
+            let (sender, receiver) = channel();
+            let f = Closure::once(move || sender.send(()).unwrap_throw());
+            let id = window
+                .request_animation_frame(f.as_ref().unchecked_ref())
+                .unwrap_throw();
+
+            // store the closure so it isn't dropped.
+            self.f = Some(f);
+            self.id = Some(id);
+            self.receiver = Some(receiver);
+        }
+
+        match Pin::new(self.receiver.as_mut().unwrap()).poll(cx) {
+            Poll::Pending => Poll::Pending,
+            Poll::Ready(Ok(_)) => {
+                self.receiver = None;
+                self.f = None;
+                self.id = None;
+                Poll::Ready(Some(()))
+            }
+            Poll::Ready(Err(_)) => panic!("error in AnimationLoop"),
+        }
     }
 }
 
-impl<T: Send + Sync + 'static> Debug for AnimationLoop<T> {
+impl Debug for AnimationLoop {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("AnimationLoop")
-            .field("f", &"FnMut(T)")
-            .finish()
+        f.debug_struct("AnimationLoop").finish()
+    }
+}
+
+impl Drop for AnimationLoop {
+    fn drop(&mut self) {
+        if let Some(id) = self.id {
+            crate::window().cancel_animation_frame(id).unwrap_throw();
+        }
     }
 }
