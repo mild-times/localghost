@@ -14,6 +14,7 @@ repository = "https://github.com/yoshuawuyts/coast"
 [dependencies]
 futures-channel = "0.3.1"
 futures-timer = "3.0.1"
+coast-macros = { path = "coast-macros" }
 js-sys = "0.3.35"
 kv-log-macro = "1.0.4"
 log = { version = "0.4.8", features = ["kv_unstable", "std"] }

@@ -32,3 +32,6 @@ mod window;
 pub use document_ready::ready;
 pub use history::History;
 pub use window::{document, window};
+
+#[doc(inline)]
+pub use coast_macros::main;

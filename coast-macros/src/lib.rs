@@ -4,8 +4,6 @@
 #![deny(missing_debug_implementations, nonstandard_style)]
 #![recursion_limit = "512"]
 
-extern crate proc_macro;
-
 use proc_macro::TokenStream;
 use quote::{quote, quote_spanned};
 use syn::spanned::Spanned;
@@ -56,9 +54,9 @@ pub fn main(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 #body
             }
 
-            wasm_bindgen_futures::spawn_local(async {
+            coast::task::spawn_local(async {
                 main().await#end;
-            })
+            });
         }
 
     };
