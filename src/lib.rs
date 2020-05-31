@@ -31,4 +31,4 @@ mod window;
 
 pub use document_ready::ready;
 pub use history::History;
-pub use window::window;
+pub use window::{document, window};
