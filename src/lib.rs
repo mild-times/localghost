@@ -29,9 +29,9 @@ mod document;
 mod history;
 mod window;
 
-pub use document::{document, ready, Document};
+pub use document::{document, Document};
 pub use history::History;
-pub use window::window;
+pub use window::{window, Window};
 
 #[doc(inline)]
 pub use coast_macros::main;

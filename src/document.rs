@@ -36,6 +36,36 @@ impl Document {
             .expect_throw("Could not find `window.document`");
         Self { doc }
     }
+
+    /// Wait for the DOM to be loaded.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use wasm_bindgen::prelude::*;
+    /// use coast::ready;
+    ///
+    /// #[wasm_bindgen(start)]
+    /// pub fn main() {
+    ///     coast::task::spawn_local(async {
+    ///         println!("waiting on document to load");
+    ///         ready().await;
+    ///         println!("document loaded!");
+    ///     })
+    /// }
+    /// ```
+    pub async fn ready(&self) {
+        match self.ready_state().as_str() {
+            "complete" | "interactive" => return,
+            _ => {
+                let (sender, receiver) = channel();
+                let _listener = self.once("DOMContentLoaded", move |_| {
+                    sender.send(()).unwrap();
+                });
+                receiver.await.unwrap();
+            }
+        };
+    }
 }
 
 impl Deref for Document {
@@ -50,37 +80,4 @@ impl DerefMut for Document {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.doc
     }
-}
-
-/// Wait for the DOM to be loaded.
-///
-/// # Examples
-///
-/// ```no_run
-/// use wasm_bindgen::prelude::*;
-/// use coast::ready;
-///
-/// #[wasm_bindgen(start)]
-/// pub fn main() {
-///     coast::task::spawn_local(async {
-///         println!("waiting on document to load");
-///         ready().await;
-///         println!("document loaded!");
-///     })
-/// }
-/// ```
-
-pub async fn ready() {
-    let document = crate::window().document().unwrap_throw();
-
-    match document.ready_state().as_str() {
-        "complete" | "interactive" => return,
-        _ => {
-            let (sender, receiver) = channel();
-            let _listener = document.once("DOMContentLoaded", move |_| {
-                sender.send(()).unwrap();
-            });
-            receiver.await.unwrap();
-        }
-    };
 }
