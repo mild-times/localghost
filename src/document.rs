@@ -29,6 +29,7 @@ pub struct Document {
 }
 
 impl Document {
+    /// Create a new `Document`.
     pub fn new() -> Self {
         let doc = window()
             .document()
