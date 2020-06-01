@@ -25,13 +25,13 @@ pub mod net;
 pub mod prelude;
 pub mod task;
 
-mod document_ready;
+mod document;
 mod history;
 mod window;
 
-pub use document_ready::ready;
+pub use document::{document, ready, Document};
 pub use history::History;
-pub use window::{document, window};
+pub use window::window;
 
 #[doc(inline)]
 pub use coast_macros::main;

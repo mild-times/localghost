@@ -1,11 +1,55 @@
-#![forbid(unsafe_code, future_incompatible, rust_2018_idioms)]
-#![deny(missing_debug_implementations, nonstandard_style)]
-#![warn(missing_docs, missing_doc_code_examples, unreachable_pub)]
-
 use crate::events::EventTarget;
 use crate::prelude::*;
+use crate::window;
+
+use std::ops::{Deref, DerefMut};
 
 use futures_channel::oneshot::channel;
+
+/// Access the browser's `Document` object.
+///
+/// # Errors
+///
+/// This function panics if a `Document` is not found.
+///
+/// # Example
+///
+/// ```no_run
+/// let doc = coast::document();
+/// # drop(doc)
+/// ```
+pub fn document() -> Document {
+    Document::new()
+}
+
+/// A reference to the root document.
+#[derive(Debug)]
+pub struct Document {
+    doc: web_sys::Document,
+}
+
+impl Document {
+    pub fn new() -> Self {
+        let doc = window()
+            .document()
+            .expect_throw("Could not find `window.document`");
+        Self { doc }
+    }
+}
+
+impl Deref for Document {
+    type Target = web_sys::Document;
+
+    fn deref(&self) -> &Self::Target {
+        &self.doc
+    }
+}
+
+impl DerefMut for Document {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.doc
+    }
+}
 
 /// Wait for the DOM to be loaded.
 ///

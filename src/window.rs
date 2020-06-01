@@ -1,3 +1,5 @@
+use std::ops::{Deref, DerefMut};
+
 use crate::prelude::*;
 
 /// Access the browser's `Window` object.
@@ -12,24 +14,34 @@ use crate::prelude::*;
 /// let window = coast::window();
 /// # drop(window)
 /// ```
-pub fn window() -> web_sys::Window {
-    web_sys::window().expect_throw("should have a `Window` on the Web")
+pub fn window() -> Window {
+    Window::new()
 }
 
-/// Access the browser's `Document` object.
-///
-/// # Errors
-///
-/// This function panics if a `Document` is not found.
-///
-/// # Example
-///
-/// ```no_run
-/// let doc = coast::document();
-/// # drop(doc)
-/// ```
-pub fn document() -> web_sys::Document {
-    window()
-        .document()
-        .expect_throw("Could not find `window.document`")
+/// A reference to the `Window` object.
+#[derive(Debug)]
+pub struct Window {
+    window: web_sys::Window,
+}
+
+impl Window {
+    /// Create a new instance of `Window`.
+    pub fn new() -> Self {
+        let window = web_sys::window().expect_throw("should have a `Window` on the Web");
+        Self { window }
+    }
+}
+
+impl Deref for Window {
+    type Target = web_sys::Window;
+
+    fn deref(&self) -> &Self::Target {
+        &self.window
+    }
+}
+
+impl DerefMut for Window {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.window
+    }
 }
