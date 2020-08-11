@@ -36,6 +36,7 @@ features = [
     "EventTarget",
     "Headers",
     "History",
+    "HtmlElement",
     "Navigator",
     "Request",
     "RequestInit",

@@ -1,3 +1,4 @@
+//! HTML DOM.
 use crate::events::EventTarget;
 use crate::prelude::*;
 use crate::window;
@@ -5,6 +6,9 @@ use crate::window;
 use std::ops::{Deref, DerefMut};
 
 use futures_channel::oneshot::channel;
+
+// re-exports, temporary only
+pub use web_sys::HtmlElement;
 
 /// Access the browser's `Document` object.
 ///
@@ -35,6 +39,11 @@ impl Document {
             .document()
             .expect_throw("Could not find `window.document`");
         Self { doc }
+    }
+
+    /// Get the Body from the document.
+    pub fn body(&self) -> HtmlElement {
+        self.doc.body().expect_throw("Could not find `window.body`")
     }
 
     /// Wait for the DOM to be loaded.
