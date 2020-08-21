@@ -19,7 +19,7 @@ pub use web_sys::HtmlElement;
 /// # Example
 ///
 /// ```no_run
-/// let doc = coast::document();
+/// let doc = localghost::document();
 /// # drop(doc)
 /// ```
 pub fn document() -> Document {
@@ -52,11 +52,11 @@ impl Document {
     ///
     /// ```no_run
     /// use wasm_bindgen::prelude::*;
-    /// use coast::ready;
+    /// use localghost::ready;
     ///
     /// #[wasm_bindgen(start)]
     /// pub fn main() {
-    ///     coast::task::spawn_local(async {
+    ///     localghost::task::spawn_local(async {
     ///         println!("waiting on document to load");
     ///         ready().await;
     ///         println!("document loaded!");

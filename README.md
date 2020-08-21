@@ -1,4 +1,4 @@
-<h1 align="center">coast</h1>
+<h1 align="center">localghost</h1>
 <div align="center">
   <strong>
     API bindings for Web APIs
@@ -9,17 +9,17 @@
 
 <div align="center">
   <!-- Crates version -->
-  <a href="https://crates.io/crates/coast">
-    <img src="https://img.shields.io/crates/v/coast.svg?style=flat-square"
+  <a href="https://crates.io/crates/localghost">
+    <img src="https://img.shields.io/crates/v/localghost.svg?style=flat-square"
     alt="Crates.io version" />
   </a>
   <!-- Downloads -->
-  <a href="https://crates.io/crates/coast">
-    <img src="https://img.shields.io/crates/d/coast.svg?style=flat-square"
+  <a href="https://crates.io/crates/localghost">
+    <img src="https://img.shields.io/crates/d/localghost.svg?style=flat-square"
       alt="Download" />
   </a>
   <!-- docs.rs docs -->
-  <a href="https://docs.rs/coast">
+  <a href="https://docs.rs/localghost">
     <img src="https://img.shields.io/badge/docs-latest-blue.svg?style=flat-square"
       alt="docs.rs docs" />
   </a>
@@ -27,15 +27,15 @@
 
 <div align="center">
   <h3>
-    <a href="https://docs.rs/coast">
+    <a href="https://docs.rs/localghost">
       API Docs
     </a>
     <span> | </span>
-    <a href="https://github.com/yoshuawuyts/coast/releases">
+    <a href="https://github.com/yoshuawuyts/localghost/releases">
       Releases
     </a>
     <span> | </span>
-    <a href="https://github.com/yoshuawuyts/coast/blob/master.github/CONTRIBUTING.md">
+    <a href="https://github.com/yoshuawuyts/localghost/blob/master.github/CONTRIBUTING.md">
       Contributing
     </a>
   </h3>
@@ -43,7 +43,7 @@
 
 ## Installation
 ```sh
-$ cargo add coast
+$ cargo add localghost
 ```
 
 ## Safety
@@ -57,9 +57,9 @@ look at some of these issues:
 - [Issues labeled "good first issue"][good-first-issue]
 - [Issues labeled "help wanted"][help-wanted]
 
-[contributing]: https://github.com/yoshuawuyts/coast/blob/master.github/CONTRIBUTING.md
-[good-first-issue]: https://github.com/yoshuawuyts/coast/labels/good%20first%20issue
-[help-wanted]: https://github.com/yoshuawuyts/coast/labels/help%20wanted
+[contributing]: https://github.com/yoshuawuyts/localghost/blob/master.github/CONTRIBUTING.md
+[good-first-issue]: https://github.com/yoshuawuyts/localghost/labels/good%20first%20issue
+[help-wanted]: https://github.com/yoshuawuyts/localghost/labels/help%20wanted
 
 ## License
 

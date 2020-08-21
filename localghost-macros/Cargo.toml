@@ -1,6 +1,6 @@
 [package]
-name = "coast-macros"
-version = "0.1.0"
+name = "localghost-macros"
+version = "0.0.0"
 authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
 edition = "2018"
 

@@ -13,7 +13,7 @@ use syn::spanned::Spanned;
 /// # Examples
 ///
 /// ```ignore
-/// #[coast::main]
+/// #[localghost::main]
 /// async fn main() -> std::io::Result<()> {
 ///     Ok(())
 /// }
@@ -31,7 +31,7 @@ pub fn main(_attr: TokenStream, item: TokenStream) -> TokenStream {
 
     if name != "main" {
         return TokenStream::from(quote_spanned! { name.span() =>
-            compile_error!("only the main function can be tagged with #[coast::main]"),
+            compile_error!("only the main function can be tagged with #[localghost::main]"),
         });
     }
 
@@ -54,7 +54,7 @@ pub fn main(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 #body
             }
 
-            coast::task::spawn_local(async {
+            localghost::task::spawn_local(async {
                 main().await#end;
             });
         }

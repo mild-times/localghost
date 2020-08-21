@@ -11,7 +11,7 @@ use crate::prelude::*;
 /// # Example
 ///
 /// ```no_run
-/// let window = coast::window();
+/// let window = localghost::window();
 /// # drop(window)
 /// ```
 pub fn window() -> Window {

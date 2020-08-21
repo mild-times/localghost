@@ -4,10 +4,10 @@
 //!
 //!
 //! ```no_run
-//! use coast::prelude::*;
-//! use coast::{ready, net};
+//! use localghost::prelude::*;
+//! use localghost::{ready, net};
 //!
-//! #[coast::main]
+//! #[localghost::main]
 //! async fn main() {
 //!     ready().await;
 //!     let res = net::Request::new("GET", "https://example.com").send().await;
@@ -34,4 +34,4 @@ pub use history::History;
 pub use window::{window, Window};
 
 #[doc(inline)]
-pub use coast_macros::main;
+pub use localghost_macros::main;

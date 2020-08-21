@@ -3,18 +3,18 @@ version = "0.0.0"
 authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
 categories = []
 description = "API bindings for Web APIs"
-documentation = "https://docs.rs/coast"
+documentation = "https://docs.rs/localghost"
 edition = "2018"
 keywords = []
 license = "MIT OR Apache-2.0"
-name = "coast"
+name = "localghost"
 readme = "README.md"
-repository = "https://github.com/yoshuawuyts/coast"
+repository = "https://github.com/yoshuawuyts/localghost"
 
 [dependencies]
 futures-channel = "0.3.1"
 futures-timer = "3.0.1"
-coast-macros = { path = "coast-macros" }
+localghost-macros = { path = "localghost-macros" }
 js-sys = "0.3.35"
 kv-log-macro = "1.0.4"
 log = { version = "0.4.8", features = ["kv_unstable", "std"] }
