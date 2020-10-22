@@ -7,6 +7,7 @@ use futures_channel::oneshot::channel;
 use std::ops::{Deref, DerefMut};
 
 // re-exports, temporary only
+pub use element_kind::ElementKind;
 pub use text::Text;
 pub use web_sys::HtmlElement;
 pub use window::{window, Window};
