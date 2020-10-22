@@ -5,7 +5,7 @@ use log::{kv, Level, LevelFilter, Log, Metadata, Record};
 use wasm_bindgen::prelude::*;
 
 #[doc(inline)]
-pub use kv_log_macro::{debug, error, info, warn};
+pub use log::{debug, error, info, warn};
 
 use std::collections::HashMap;
 
@@ -18,10 +18,10 @@ pub struct Logger {
 impl Logger {
     /// Create a new instance of `Logger`.
     ///
-    /// By default logs messages of log level `Info` and higher.
+    /// By default logs messages of log level `Trace` and higher.
     pub fn new() -> Self {
         Self {
-            filter: LevelFilter::Info,
+            filter: LevelFilter::Trace,
         }
     }
 

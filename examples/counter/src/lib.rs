@@ -1,29 +1,41 @@
 use localghost::prelude::*;
-use localghost::events::EventListener;
-use localghost::dom::{Element, ElementKind, Text};
+use localghost::dom::{Element, ElementKind, query_selector};
 
 use std::cell::RefCell;
 
 #[localghost::main]
 async fn main() {
+    localghost::log::Logger::new().start();
     let count = RefCell::new(0usize);
-    let mut body = localghost::document().body();
+    let body = localghost::document().body();
 
-    let mut button = Element::new(ElementKind::Button);
-    let count2 = count.clone();
-    EventListener::listen(&button, "click", move |_| {
-        *count2.borrow_mut() += 1;
-    }).forget();
-    button.append_child(Text::new("+"));
+    println!("suppp");
+    localghost::log::info!("{}", "hjello");
+    let button = Element::with_text(ElementKind::Button, "+ss");
+    let count_handle = count.clone();
+    button.on("click", move |_| {
+        // let mut handle = count_handle.borrow_mut();
+        // *handle += 1;
+        localghost::log::info!("{}", "hjello");
+        // let counter = query_selector("counter").unwrap_throw();
+        // counter.set_text_content(Some(&format!("{}", handle)))
+    });
     body.append_child(button);
 
-    body.append_child(Text::new(&format!("{}", count.borrow())));
 
-    let mut button = Element::new(ElementKind::Button);
-    button.append_child(Text::new("-"));
-    let count2 = count.clone();
-    EventListener::listen(&button, "click", move |_| {
-        *count2.borrow_mut() += 1;
-    }).forget();
-    body.append_child(button);
+    // let p = Element::with_text(ElementKind::P, &format!("{}", count.borrow()));
+    // p.set_attribute("id", "counter");
+    // body.append_child(p);
+
+    // let button = Element::with_text(ElementKind::Button, "-");
+    // let count_handle = count.clone();
+    // button.on("click", move |_| {
+    //     let mut handle = count_handle.borrow_mut();
+    //     if *handle > 0 {
+    //         *handle -= 1;
+    //         let counter = query_selector("counter").unwrap_throw();
+    //         counter.set_text_content(Some(&format!("{}", handle)))
+    //     }
+    // });
+    // body.append_child(button);
 }

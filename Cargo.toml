@@ -40,6 +40,7 @@ features = [
     "History",
     "HtmlElement",
     "Navigator",
+    "NodeList",
     "Request",
     "RequestInit",
     "Response",

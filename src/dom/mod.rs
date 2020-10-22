@@ -9,11 +9,13 @@ use std::ops::{Deref, DerefMut};
 // re-exports, temporary only
 pub use element::Element;
 pub use element_kind::ElementKind;
+pub use query_selector::query_selector;
 pub use text::Text;
 pub use window::{window, Window};
 
 mod element;
 mod element_kind;
+mod query_selector;
 mod text;
 mod window;
 
@@ -80,9 +82,7 @@ impl Document {
             "complete" | "interactive" => return,
             _ => {
                 let (sender, receiver) = channel();
-                let _listener = self.once("DOMContentLoaded", move |_| {
-                    sender.send(()).unwrap();
-                });
+                let _listener = self.once("DOMContentLoaded", move |_| sender.send(()).unwrap());
                 receiver.await.unwrap();
             }
         };
