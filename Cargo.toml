@@ -24,6 +24,7 @@ wasm-bindgen-test = "0.3.8"
 async-std = {version = "1.5.0", features = ["unstable"] }
 pin-project = "0.4.17"
 pin-project-lite = "0.1.5"
+console_error_panic_hook = "0.1.6"
 # send_wrapper = "0.4.0"
 
 [dependencies.web-sys]

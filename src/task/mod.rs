@@ -1,4 +1,4 @@
-//! Types and Traits for working with asynchronous tasks.
+//! Types and traits for working with asynchronous tasks.
 
 mod animation_loop;
 mod spawn;

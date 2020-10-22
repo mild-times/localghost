@@ -8,7 +8,11 @@ use proc_macro::TokenStream;
 use quote::{quote, quote_spanned};
 use syn::spanned::Spanned;
 
-/// Enables an async main function.
+/// Initializes an `async` main function.
+///
+/// This enables the use of `async/.await` from the root of the program, logs any
+/// errors returned from the program, and ensures [panics are
+/// logged to the console](https://docs.rs/console_error_panic_hook/0.1.6/console_error_panic_hook/index.html).
 ///
 /// # Examples
 ///
@@ -49,6 +53,8 @@ pub fn main(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let result = quote! {
         #[wasm_bindgen(start)]
         pub fn main() #ret {
+            ::localghost::macro_export::set_panic_hook();
+
             #(#attrs)*
             async fn main(#inputs) #ret {
                 #body
