@@ -1,11 +1,11 @@
 use localghost::prelude::*;
-use localghost::dom;
+use localghost::dom::{Element, ElementKind, Text};
 
 #[localghost::main]
 async fn main() {
-    let mut p = dom::Element::new(dom::NodeKind::P);
-    p.append_child(dom::Text::new("Hello world"));
+    let mut p = Element::new(ElementKind::P);
+    p.append_child(Text::new("Hello world"));
 
-    let body = localghost::document().body();
+    let mut body = localghost::document().body();
     body.append_child(p);
 }

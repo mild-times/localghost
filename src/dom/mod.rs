@@ -50,7 +50,12 @@ impl Document {
 
     /// Get the Body from the document.
     pub fn body(&self) -> Element {
-        self.doc.body().expect_throw("Could not find `window.body`")
+        let el = self
+            .doc
+            .query_selector("body")
+            .expect_throw("Could not find `window.body`")
+            .expect_throw("Could not find `window.body`");
+        unsafe { Element::from_raw(ElementKind::Body, el) }
     }
 
     /// Wait for the DOM to be loaded.

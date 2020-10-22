@@ -2,12 +2,14 @@ use crate::dom::ElementKind;
 use crate::prelude::*;
 
 /// An HTML element.
+#[derive(Debug)]
 pub struct Element {
     kind: ElementKind,
-    el: web_sys::HtmlElement,
+    el: web_sys::Element,
 }
 
 impl Element {
+    /// Create a new instance.
     pub fn new(kind: ElementKind) -> Self {
         let el = crate::document()
             .create_element(kind.as_str())
@@ -15,8 +17,17 @@ impl Element {
         Self { kind, el }
     }
 
-    pub unsafe fn from_raw(kind: ElementKind, el: web_sys::HtmlElement) -> Self {
+    /// Create a new instance from a `web_sys::Element` and an `ElementKind`.
+    pub unsafe fn from_raw(kind: ElementKind, el: web_sys::Element) -> Self {
         Self { el, kind }
+    }
+
+    /// Append a child element.
+    pub fn append_child<C>(&mut self, child: C)
+    where
+        C: AsRef<web_sys::Node>,
+    {
+        self.el.append_child(child.as_ref()).unwrap_throw();
     }
 }
 

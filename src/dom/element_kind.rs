@@ -487,6 +487,7 @@ pub enum ElementKind {
 }
 
 impl ElementKind {
+    /// Convert the `ElementKind` to a string.
     pub fn as_str(&self) -> &'static str {
         match self {
             Self::Base => "base",

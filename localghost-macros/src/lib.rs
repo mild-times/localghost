@@ -51,7 +51,8 @@ pub fn main(_attr: TokenStream, item: TokenStream) -> TokenStream {
     };
 
     let result = quote! {
-        #[wasm_bindgen(start)]
+        use ::localghost::macro_export::wasm_bindgen;
+        #[::localghost::macro_export::wasm_bindgen(start)]
         pub fn main() #ret {
             ::localghost::macro_export::set_panic_hook();
 

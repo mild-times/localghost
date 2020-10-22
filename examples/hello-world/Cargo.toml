@@ -1,7 +1,7 @@
 [package]
-name = "dodrio-hello-world"
+name = "localghost-hello-world"
 version = "0.1.0"
-authors = ["Nick Fitzgerald <fitzgen@gmail.com>"]
+authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
 edition = "2018"
 
 [lib]
@@ -10,18 +10,7 @@ crate-type = ["cdylib"]
 [features]
 
 [dependencies]
-dodrio = { path = "../.." }
-wasm-bindgen = "0.2.55"
-console_error_panic_hook = "0.1.6"
-
-[dependencies.web-sys]
-version = "0.3.32"
-features = [
-  "Document",
-  "HtmlElement",
-  "Node",
-  "Window",
-]
+localghost = { path = "../.." }
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.5"

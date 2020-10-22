@@ -17,5 +17,5 @@ wasm-pack build --target web
 Use any HTTP server, for example:
 
 ```
-python -m SimpleHTTPServer
+python -m http.server
 ```
