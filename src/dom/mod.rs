@@ -2,14 +2,18 @@
 
 use crate::events::EventTarget;
 use crate::prelude::*;
-use crate::window;
-
-use std::ops::{Deref, DerefMut};
 
 use futures_channel::oneshot::channel;
+use std::ops::{Deref, DerefMut};
 
 // re-exports, temporary only
+pub use text::Text;
 pub use web_sys::HtmlElement;
+pub use window::{window, Window};
+
+mod element_kind;
+mod text;
+mod window;
 
 /// Access the browser's `Document` object.
 ///

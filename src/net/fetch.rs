@@ -1,5 +1,5 @@
-use std::io;
 use std::fmt::{self, Debug};
+use std::io;
 
 use js_sys::{Array, ArrayBuffer, Reflect, Uint8Array};
 use wasm_bindgen::JsCast;
@@ -49,7 +49,6 @@ impl Request {
         Ok(Response::new(res, body))
     }
 }
-
 
 /// An HTTP Fetch Response.
 #[derive(Debug)]

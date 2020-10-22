@@ -1,6 +1,9 @@
-//! The browser's history API
+//! The browser History API.
 //!
-//! Read more on [MDN - Web APIs: History](https://developer.mozilla.org/en-US/docs/Web/API/History).
+//! Navigate back and forth through the user's history, and manipulate the contents of the history stack
+//!
+//! [Read more](https://developer.mozilla.org/en-US/docs/Web/API/History).
+//!
 //! Notes: https://yoshuawuyts-old.netlify.com/history
 
 use crate::prelude::*;
@@ -16,8 +19,6 @@ const EXISTS: RefCell<AtomicBool> = RefCell::new(AtomicBool::new(false));
 /// The Web History API.
 ///
 /// This provides a structured view onto the browser's history stack.
-///
-/// [Read more..](https://developer.mozilla.org/en-US/docs/Web/API/History_API)
 ///
 /// # Cursor
 ///
