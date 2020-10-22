@@ -29,6 +29,7 @@ pub mod task;
 mod history;
 mod window;
 
+#[doc(inline)]
 pub use document::{document, Document};
 pub use history::History;
 pub use window::{window, Window};

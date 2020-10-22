@@ -17,6 +17,8 @@ const EXISTS: RefCell<AtomicBool> = RefCell::new(AtomicBool::new(false));
 ///
 /// This provides a structured view onto the browser's history stack.
 ///
+/// [Read more..](https://developer.mozilla.org/en-US/docs/Web/API/History_API)
+///
 /// # Cursor
 ///
 /// The state of the history API is kept in the browser's "history stack". We can
@@ -95,25 +97,6 @@ impl History {
         receiver.await.unwrap();
     }
 
-    /// Pop a url from the history stack.
-    ///
-    /// # Cursor
-    ///
-    /// This moves the history cursor backward.
-    ///
-    /// # Stability
-    ///
-    /// This method will be removed in favor of a `DoubleEndedStream` impl later
-    /// on.
-    pub async fn forward(&mut self) {
-        let (sender, receiver) = channel();
-        let _listener = crate::window().once("popstate", move |_| {
-            sender.send(()).unwrap();
-        });
-        self.inner.forward().unwrap_throw();
-        receiver.await.unwrap();
-    }
-
     /// Replace the url currently on the stack with another url.
     ///
     /// # Cursor
@@ -125,6 +108,25 @@ impl History {
             .replace_state_with_url(&null, "", Some(url))
             .unwrap_throw();
     }
+
+    /// Move the cursor forward in time.
+    ///
+    /// # Cursor
+    ///
+    /// This moves the history cursor forward.
+    pub async fn forward(&mut self) {
+        let (sender, receiver) = channel();
+        let _listener = crate::window().once("popstate", move |_| {
+            sender.send(()).unwrap();
+        });
+        self.inner.forward().unwrap_throw();
+        receiver.await.unwrap();
+    }
+
+    // fn len
+    // fn forward
+    // fn backward
+    // fn go
 }
 
 impl Drop for History {

@@ -1,4 +1,5 @@
-//! HTML DOM.
+//! The root element of the web page.
+
 use crate::events::EventTarget;
 use crate::prelude::*;
 use crate::window;
