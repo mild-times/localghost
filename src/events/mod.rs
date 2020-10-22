@@ -72,8 +72,9 @@ impl Builder {
     }
 
     /// Register an event listener.
-    pub fn listen<S, F>(self, target: &web_sys::EventTarget, event_type: S, f: F) -> EventListener
+    pub fn listen<T, S, F>(self, target: T, event_type: S, f: F) -> EventListener
     where
+        T: AsRef<web_sys::EventTarget>,
         S: Into<Cow<'static, str>>,
         F: FnMut(&Event) + 'static,
     {
@@ -86,6 +87,7 @@ impl Builder {
         options.capture(self.phase.is_capture());
 
         target
+            .as_ref()
             .add_event_listener_with_callback_and_add_event_listener_options(
                 &event_type,
                 f.as_ref().unchecked_ref(),
@@ -94,7 +96,7 @@ impl Builder {
             .unwrap_throw();
 
         EventListener {
-            target: target.clone(),
+            target: target.as_ref().clone(),
             event_type,
             f: Some(f),
             phase: self.phase,
@@ -102,11 +104,13 @@ impl Builder {
     }
 
     /// Register an event listener that will be called at most once.
-    pub fn listen_once<S, F>(target: &web_sys::EventTarget, event_type: S, f: F) -> EventListener
+    pub fn listen_once<T, S, F>(target: T, event_type: S, f: F) -> EventListener
     where
+        T: AsRef<web_sys::EventTarget>,
         S: Into<Cow<'static, str>>,
         F: FnOnce(&Event) + 'static,
     {
+        let target = target.as_ref();
         let f = Closure::once(f);
         let phase = EventPhase::Bubble;
         let event_type = event_type.into();
@@ -144,8 +148,9 @@ pub struct EventListener {
 impl EventListener {
     /// Register an event listener.
     #[inline]
-    pub fn listen<S, F>(target: &web_sys::EventTarget, event_type: S, f: F) -> Self
+    pub fn listen<T, S, F>(target: T, event_type: S, f: F) -> Self
     where
+        T: AsRef<web_sys::EventTarget>,
         S: Into<Cow<'static, str>>,
         F: FnMut(&Event) + 'static,
     {

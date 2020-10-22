@@ -36,3 +36,9 @@ impl AsRef<web_sys::Node> for Element {
         self.el.as_ref()
     }
 }
+
+impl AsRef<web_sys::EventTarget> for Element {
+    fn as_ref(&self) -> &web_sys::EventTarget {
+        self.el.as_ref()
+    }
+}
