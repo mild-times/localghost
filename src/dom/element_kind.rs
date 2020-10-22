@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 /// The kind of element to construct.
 #[derive(Debug)]
 pub enum ElementKind {
@@ -79,9 +81,9 @@ pub enum ElementKind {
     /// element.
     H6,
     /// An HTML
-    /// [`<hgroup>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/hgroup)
+    /// [`<hGroup>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/hgroup)
     /// element.
-    Hgroup,
+    HGroup,
     /// An HTML
     /// [`<main>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/main)
     /// element.
@@ -99,7 +101,7 @@ pub enum ElementKind {
     /// An HTML
     /// [`<blockquote>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/blockquote)
     /// element.
-    Blockquote,
+    BlockQuote,
     /// An HTML
     /// [`<dd>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dd)
     /// element.
@@ -119,7 +121,7 @@ pub enum ElementKind {
     /// An HTML
     /// [`<figcaption>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/figcaption)
     /// element.
-    Figcaption,
+    FigCaption,
     /// An HTML
     /// [`<figure>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/figure)
     /// element.
@@ -361,9 +363,9 @@ pub enum ElementKind {
     /// element.
     Col,
     /// An HTML
-    /// [`<colgroup>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/colgroup)
+    /// [`<colGroup>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/colgroup)
     /// element.
-    Colgroup,
+    ColGroup,
     /// An HTML
     /// [`<table>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table)
     /// element.
@@ -371,7 +373,7 @@ pub enum ElementKind {
     /// An HTML
     /// [`<tbody>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/tbody)
     /// element.
-    Tbody,
+    TBody,
     /// An HTML
     /// [`<td>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/td)
     /// element.
@@ -379,7 +381,7 @@ pub enum ElementKind {
     /// An HTML
     /// [`<tfoot>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/tfoot)
     /// element.
-    Tfoot,
+    TFoot,
     /// An HTML
     /// [`<th>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th)
     /// element.
@@ -401,11 +403,11 @@ pub enum ElementKind {
     /// An HTML
     /// [`<datalist>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/datalist)
     /// element.
-    Datalist,
+    DataList,
     /// An HTML
     /// [`<fieldset>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/fieldset)
     /// element.
-    Fieldset,
+    FieldSet,
     /// An HTML
     /// [`<form>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form)
     /// element.
@@ -427,9 +429,9 @@ pub enum ElementKind {
     /// element.
     Meter,
     /// An HTML
-    /// [`<optgroup>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/optgroup)
+    /// [`<optGroup>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/optgroup)
     /// element.
-    Optgroup,
+    OptGroup,
     /// An HTML
     /// [`<option>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/option)
     /// element.
@@ -449,7 +451,7 @@ pub enum ElementKind {
     /// An HTML
     /// [`<textarea>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea)
     /// element.
-    Textarea,
+    TextArea,
 
     // Interactive elements
     /// An HTML
@@ -467,7 +469,7 @@ pub enum ElementKind {
     /// An HTML
     /// [`<menuitem>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/menuitem)
     /// element.
-    Menuitem,
+    MenuItem,
     /// An HTML
     /// [`<summary>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/summary)
     /// element.
@@ -482,4 +484,131 @@ pub enum ElementKind {
     /// [`<template>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template)
     /// element.
     Template,
+}
+
+impl ElementKind {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Base => "base",
+            Self::Head => "head",
+            Self::Link => "link",
+            Self::Meta => "meta",
+            Self::Style => "style",
+            Self::Title => "title",
+            Self::Body => "body",
+            Self::Address => "address",
+            Self::Article => "article",
+            Self::Aside => "aside",
+            Self::Footer => "footer",
+            Self::Header => "header",
+            Self::H1 => "h1",
+            Self::H2 => "h2",
+            Self::H3 => "h3",
+            Self::H4 => "h4",
+            Self::H5 => "h5",
+            Self::H6 => "h6",
+            Self::HGroup => "hgroup",
+            Self::Main => "main",
+            Self::Nav => "nav",
+            Self::Section => "section",
+            Self::BlockQuote => "blockquote",
+            Self::Dd => "dd",
+            Self::Div => "div",
+            Self::Dl => "dl",
+            Self::Dt => "dt",
+            Self::FigCaption => "figcaption",
+            Self::Figure => "figure",
+            Self::Hr => "hr",
+            Self::Li => "li",
+            Self::Ol => "ol",
+            Self::P => "p",
+            Self::Pre => "pre",
+            Self::Ul => "ul",
+            Self::A => "a",
+            Self::Abbr => "abbr",
+            Self::B => "b",
+            Self::Bdi => "bdi",
+            Self::Bdo => "bdo",
+            Self::Br => "br",
+            Self::Cite => "cite",
+            Self::Code => "code",
+            Self::Data => "data",
+            Self::Dfn => "dfn",
+            Self::Em => "em",
+            Self::I => "i",
+            Self::Kbd => "kbd",
+            Self::Mark => "mark",
+            Self::Q => "q",
+            Self::Rb => "rb",
+            Self::Rp => "rp",
+            Self::Rt => "rt",
+            Self::Rtc => "rtc",
+            Self::Ruby => "ruby",
+            Self::S => "s",
+            Self::Samp => "samp",
+            Self::Small => "small",
+            Self::Span => "span",
+            Self::Strong => "strong",
+            Self::Sub => "sub",
+            Self::Sup => "sup",
+            Self::Time => "time",
+            Self::U => "u",
+            Self::Var => "var",
+            Self::Wbr => "wbr",
+            Self::Area => "area",
+            Self::Audio => "audio",
+            Self::Img => "img",
+            Self::Map => "map",
+            Self::Track => "track",
+            Self::Video => "video",
+            Self::Embed => "embed",
+            Self::Iframe => "iframe",
+            Self::Object => "object",
+            Self::Param => "param",
+            Self::Picture => "picture",
+            Self::Source => "source",
+            Self::Canvas => "canvas",
+            Self::Noscript => "noscript",
+            Self::Script => "script",
+            Self::Del => "del",
+            Self::Ins => "ins",
+            Self::Caption => "caption",
+            Self::Col => "col",
+            Self::ColGroup => "colgroup",
+            Self::Table => "table",
+            Self::TBody => "tbody",
+            Self::Td => "td",
+            Self::TFoot => "tfoot",
+            Self::Th => "th",
+            Self::Thead => "thead",
+            Self::Tr => "tr",
+            Self::Button => "button",
+            Self::DataList => "datalist",
+            Self::FieldSet => "fieldset",
+            Self::Form => "form",
+            Self::Input => "input",
+            Self::Label => "label",
+            Self::Legend => "legend",
+            Self::Meter => "meter",
+            Self::OptGroup => "optgroup",
+            Self::Option => "option",
+            Self::Output => "output",
+            Self::Progress => "progress",
+            Self::Select => "select",
+            Self::TextArea => "textarea",
+            Self::Details => "details",
+            Self::Dialog => "dialog",
+            Self::Menu => "menu",
+            Self::MenuItem => "menuitem",
+            Self::Summary => "summary",
+            Self::Slot => "slot",
+            Self::Template => "template",
+        }
+    }
+}
+
+impl Display for ElementKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
 }

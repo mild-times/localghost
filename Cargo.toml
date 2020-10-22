@@ -33,6 +33,7 @@ features = [
     "AddEventListenerOptions",
     "console",
     "Document",
+    "Element",
     "Event",
     "EventTarget",
     "Headers",

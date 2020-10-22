@@ -7,11 +7,12 @@ use futures_channel::oneshot::channel;
 use std::ops::{Deref, DerefMut};
 
 // re-exports, temporary only
+pub use element::Element;
 pub use element_kind::ElementKind;
 pub use text::Text;
-pub use web_sys::HtmlElement;
 pub use window::{window, Window};
 
+mod element;
 mod element_kind;
 mod text;
 mod window;
@@ -48,7 +49,7 @@ impl Document {
     }
 
     /// Get the Body from the document.
-    pub fn body(&self) -> HtmlElement {
+    pub fn body(&self) -> Element {
         self.doc.body().expect_throw("Could not find `window.body`")
     }
 
