@@ -69,8 +69,6 @@ pub struct EventSource {
     receiver: Receiver<MessageEvent>,
     /// Listeners.
     listeners: Vec<EventListener>,
-    /// track whether the listener is still open
-    open: bool,
 }
 
 impl EventSource {
@@ -84,12 +82,17 @@ impl EventSource {
         // Add an error listener that will store exactly 1 error.
         let url2 = url.clone();
         let (sender, err_receiver) = channel::bounded::<io::Error>(1);
+        let inner2 = inner.clone();
         inner.on("error", move |_| {
             crate::log::debug!("EventSource({}): connection error", url2);
             let err = io::Error::new(
                 io::ErrorKind::Other,
                 format!("EventSource({}) connection error", url2).as_str(),
             );
+
+            crate::log::debug!("EventSource({}): instance closed", url2);
+            inner2.close();
+
             let _ = sender.try_send(err);
         });
 
@@ -110,7 +113,6 @@ impl EventSource {
             sender,
             receiver,
             listeners: vec![],
-            open: true,
         };
         this.check_err()?;
 
@@ -166,22 +168,10 @@ impl EventSource {
         }
     }
 
-    /// Close the inner connection. This is called on error and `Drop`.
-    fn close(&mut self) {
-        if self.open {
-            self.open = false;
-            self.inner.close();
-            crate::log::debug!("EventSource({}): instance closed", self.url);
-        }
-    }
-
     /// Check whether an error has been sent into the channel.
     fn check_err(&mut self) -> io::Result<()> {
         match self.err_receiver.try_recv() {
-            Ok(err) => {
-                self.close();
-                Err(err)
-            }
+            Ok(err) => Err(err),
             _ => Ok(()),
         }
     }
@@ -212,6 +202,9 @@ impl async_std::stream::Stream for EventSource {
         let this = self.project();
         let item = async_std::task::ready!(this.receiver.poll_next(cx));
         // TODO: race with the error stream
+        if let Ok(err) = this.err_receiver.try_recv() {
+            return Poll::Ready(Some(Err(err)));
+        };
         // let item = item.map_err(|_| {
         //     io::Error::new(
         //         io::ErrorKind::Other,
