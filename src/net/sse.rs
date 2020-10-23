@@ -3,7 +3,7 @@ use crate::prelude::*;
 use crate::utils::ResultExt;
 
 use async_channel::{self as channel, Receiver, Sender};
-use std::io;
+use std::{io, pin::Pin, task::Poll};
 use wasm_bindgen::JsCast;
 
 /// The state of the SSE connection.
@@ -53,6 +53,7 @@ impl MessageEvent {
 }
 
 /// A receiver of `Server Sent Events` (SSE).
+#[pin_project::pin_project(PinnedDrop)]
 #[derive(Debug)]
 pub struct EventSource {
     /// The internal `EventSource` handle.
@@ -64,6 +65,7 @@ pub struct EventSource {
     /// Message sender.
     sender: Sender<MessageEvent>,
     /// Message receiver.
+    #[pin]
     receiver: Receiver<MessageEvent>,
     /// Listeners.
     listeners: Vec<EventListener>,
@@ -144,7 +146,13 @@ impl EventSource {
 
     /// Receive a message from the stream.
     pub async fn recv(&self) -> io::Result<MessageEvent> {
-        let res = self.receiver.recv().await.unwrap_throw();
+        let res = self.receiver.recv().await.map_err(|_| {
+            io::Error::new(
+                io::ErrorKind::Other,
+                format!("EventSource({}): receiver error", self.url).as_ref(),
+            )
+        })?;
+        // TODO: race with the error channel here.
         Ok(res)
     }
 
@@ -179,14 +187,38 @@ impl EventSource {
     }
 }
 
-impl Drop for EventSource {
-    fn drop(&mut self) {
-        self.close();
+#[pin_project::pinned_drop]
+impl PinnedDrop for EventSource {
+    fn drop(self: Pin<&mut Self>) {
+        let this = self.project();
+        this.inner.close();
+        crate::log::debug!("EventSource({}): instance closed", this.url);
     }
 }
 
 impl AsRef<web_sys::EventTarget> for EventSource {
     fn as_ref(&self) -> &web_sys::EventTarget {
         self.inner.as_ref()
+    }
+}
+
+impl async_std::stream::Stream for EventSource {
+    type Item = io::Result<MessageEvent>;
+
+    fn poll_next(
+        self: Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Option<Self::Item>> {
+        let this = self.project();
+        let item = async_std::task::ready!(this.receiver.poll_next(cx));
+        // TODO: race with the error stream
+        // let item = item.map_err(|_| {
+        //     io::Error::new(
+        //         io::ErrorKind::Other,
+        //         format!("EventSource({}): receiver error", self.url).as_ref(),
+        //     )
+        // })?;
+
+        Poll::Ready(Ok(item).transpose())
     }
 }

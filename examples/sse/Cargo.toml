@@ -14,6 +14,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 localghost = { path = "../.." }
+futures = "0.3.0"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.5"

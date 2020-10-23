@@ -20,6 +20,7 @@ impl Event {
         self.inner.target().and_then(|t| t.dyn_into::<T>().ok())
     }
 
+    /// Convert this type into its raw counterpart.
     pub fn into_raw(self) -> web_sys::Event {
         self.inner
     }
@@ -40,5 +41,11 @@ impl Into<wasm_bindgen::JsValue> for Event {
 impl AsRef<web_sys::Event> for Event {
     fn as_ref(&self) -> &web_sys::Event {
         &self.inner
+    }
+}
+
+impl Into<web_sys::Event> for Event {
+    fn into(self) -> web_sys::Event {
+        self.inner
     }
 }
