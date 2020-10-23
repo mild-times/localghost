@@ -25,6 +25,7 @@ async-std = {version = "1.5.0", features = ["unstable"] }
 pin-project = "0.4.17"
 pin-project-lite = "0.1.5"
 console_error_panic_hook = "0.1.6"
+async-channel = "1.5.1"
 # send_wrapper = "0.4.0"
 
 [dependencies.web-sys]
@@ -35,6 +36,7 @@ features = [
     "Document",
     "Element",
     "Event",
+    "EventSource",
     "EventTarget",
     "Headers",
     "History",

@@ -30,6 +30,7 @@ pub mod prelude;
 pub mod task;
 
 mod history;
+mod utils;
 
 pub use history::History;
 #[doc(inline)]
