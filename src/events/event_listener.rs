@@ -1,4 +1,3 @@
-use std::borrow::Cow;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::{JsCast, UnwrapThrowExt};
 use web_sys::AddEventListenerOptions;
@@ -38,17 +37,17 @@ impl Builder {
     }
 
     /// Register an event listener.
-    pub fn listen<T, S, F>(self, target: T, event_type: S, f: F) -> EventListener
+    pub fn listen<T, F>(self, target: T, event_type: &str, f: F) -> EventListener
     where
         T: AsRef<web_sys::EventTarget>,
-        S: Into<Cow<'static, str>>,
+
         F: FnMut(Event) + Clone + 'static,
     {
         let target = target.as_ref();
         let mut f = f.clone();
         let f =
             Closure::wrap(Box::new(move |ev| f(Event::new(ev))) as Box<dyn FnMut(web_sys::Event)>);
-        let event_type = event_type.into();
+        let event_type = event_type.to_owned();
 
         let mut options = AddEventListenerOptions::new();
         options.once(false);
@@ -72,16 +71,16 @@ impl Builder {
     }
 
     /// Register an event listener that will be called at most once.
-    pub fn listen_once<T, S, F>(target: T, event_type: S, f: F) -> EventListener
+    pub fn listen_once<T, F>(target: T, event_type: &str, f: F) -> EventListener
     where
         T: AsRef<web_sys::EventTarget>,
-        S: Into<Cow<'static, str>>,
+
         F: FnOnce(Event) + 'static,
     {
         let target = target.as_ref();
         let f = Closure::once(|ev| f(Event::new(ev)));
         let phase = EventPhase::Bubble;
-        let event_type = event_type.into();
+        let event_type = event_type.to_owned();
 
         let mut options = AddEventListenerOptions::new();
         options.once(false);
@@ -108,7 +107,7 @@ impl Builder {
 #[must_use = "Event listener unsubscribes on drop"]
 pub struct EventListener {
     target: web_sys::EventTarget,
-    event_type: Cow<'static, str>,
+    event_type: String,
     f: Option<Closure<dyn FnMut(web_sys::Event)>>,
     phase: EventPhase,
 }
@@ -116,10 +115,10 @@ pub struct EventListener {
 impl EventListener {
     /// Register an event listener.
     #[inline]
-    pub fn listen<T, S, F>(target: T, event_type: S, f: F) -> Self
+    pub fn listen<T, F>(target: T, event_type: &str, f: F) -> Self
     where
         T: AsRef<web_sys::EventTarget>,
-        S: Into<Cow<'static, str>>,
+
         F: FnMut(Event) + Clone + 'static,
     {
         Builder::new().listen(target, event_type, f)
@@ -127,16 +126,16 @@ impl EventListener {
 
     /// Register an event listener that will be called at most once.
     #[inline]
-    pub fn listen_once<T, S, F>(target: T, event_type: S, f: F) -> Self
+    pub fn listen_once<T, F>(target: T, event_type: &str, f: F) -> Self
     where
         T: AsRef<web_sys::EventTarget>,
-        S: Into<Cow<'static, str>>,
+
         F: FnOnce(Event) + 'static,
     {
         let target = target.as_ref();
         let f = Closure::once(|ev| f(Event::new(ev)));
         let phase = EventPhase::Bubble;
-        let event_type = event_type.into();
+        let event_type = event_type.to_owned();
 
         let mut options = AddEventListenerOptions::new();
         options.once(false);

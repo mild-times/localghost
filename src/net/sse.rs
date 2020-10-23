@@ -2,8 +2,9 @@ use crate::events::EventListener;
 use crate::prelude::*;
 use crate::utils::ResultExt;
 
-use async_channel::{bounded, Receiver};
+use async_channel::{self as channel, Receiver, Sender};
 use std::io;
+use wasm_bindgen::JsCast;
 
 /// The state of the SSE connection.
 #[derive(Debug, Ord, PartialOrd, Eq, PartialEq, Hash)]
@@ -15,6 +16,7 @@ pub enum ReadyState {
     /// The connnection is closed.
     Closed,
 }
+
 /// An SSE event with a data payload.
 #[derive(Debug, PartialEq, Eq, Hash)]
 pub struct MessageEvent {
@@ -25,7 +27,7 @@ pub struct MessageEvent {
     /// The event name. Defaults to "message" if no event name is provided.
     pub(crate) name: String,
     /// The data for this event.
-    pub(crate) data: Vec<u8>,
+    pub(crate) data: String,
 }
 
 impl MessageEvent {
@@ -40,12 +42,12 @@ impl MessageEvent {
     }
 
     /// Access the event data.
-    pub fn data(&self) -> &[u8] {
-        &self.data
+    pub fn data(&self) -> &str {
+        self.data.as_ref()
     }
 
     /// Convert the message into the data payload.
-    pub fn into_bytes(self) -> Vec<u8> {
+    pub fn into_bytes(self) -> String {
         self.data
     }
 }
@@ -59,6 +61,12 @@ pub struct EventSource {
     url: String,
     /// A listener that catches errors from the stream.
     err_receiver: Receiver<io::Error>,
+    /// Message sender.
+    sender: Sender<MessageEvent>,
+    /// Message receiver.
+    receiver: Receiver<MessageEvent>,
+    /// Listeners.
+    listeners: Vec<EventListener>,
     /// track whether the listener is still open
     open: bool,
 }
@@ -68,12 +76,12 @@ impl EventSource {
     /// established.
     pub async fn connect(url: &str) -> io::Result<Self> {
         let url = url.to_owned();
-        crate::log::debug!("EventSource({}): connection started", url);
+        crate::log::debug!("EventSource({}): connection initiated", url);
         let inner = web_sys::EventSource::new(&url).err_kind(io::ErrorKind::InvalidInput)?;
 
         // Add an error listener that will store exactly 1 error.
         let url2 = url.clone();
-        let (sender, err_receiver) = bounded::<io::Error>(1);
+        let (sender, err_receiver) = channel::bounded::<io::Error>(1);
         inner.on("error", move |_| {
             crate::log::debug!("EventSource({}): connection error", url2);
             let err = io::Error::new(
@@ -84,24 +92,60 @@ impl EventSource {
         });
 
         // Wait to open.
-        let (sender, receiver) = bounded(1);
+        let (sender, receiver) = channel::bounded(1);
         let listener =
             EventListener::listen_once(&inner, "open", move |_| sender.try_send(()).unwrap_throw());
         receiver.recv().await.unwrap_throw();
         drop(listener);
 
-        crate::log::debug!("EventSource({}): connection established", url);
+        let (sender, receiver) = channel::unbounded();
 
+        // Create the instance and check for errors.
         let mut this = Self {
             url,
             inner,
             err_receiver,
+            sender,
+            receiver,
+            listeners: vec![],
             open: true,
         };
-
-        // Check no errors have occurred.
         this.check_err()?;
+
+        // All done :~)
+        crate::log::debug!("EventSource({}): connection established", this.url);
         Ok(this)
+    }
+
+    /// Register interest in an event.
+    pub fn register(&mut self, name: &'static str) {
+        let sender = self.sender.clone();
+        let listener = EventListener::listen(&self.inner, name.clone(), move |ev| {
+            let ev = ev
+                .into_raw()
+                .dyn_into::<web_sys::MessageEvent>()
+                .unwrap_throw();
+            let id = ev.last_event_id();
+            let id = match id.len() {
+                0 => None,
+                _ => Some(id),
+            };
+            let data: js_sys::JsString = ev.data().into();
+            let data: String = data.into();
+            let ev = MessageEvent {
+                name: name.to_owned(),
+                data,
+                id,
+            };
+            let _ = sender.try_send(ev);
+        });
+        self.listeners.push(listener);
+    }
+
+    /// Receive a message from the stream.
+    pub async fn recv(&self) -> io::Result<MessageEvent> {
+        let res = self.receiver.recv().await.unwrap_throw();
+        Ok(res)
     }
 
     /// Access the `EventSource`'s connection state.
