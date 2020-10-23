@@ -1,6 +1,5 @@
-use crate::events::EventListener;
+use crate::events::{Event, EventListener};
 use std::borrow::Cow;
-use web_sys::Event;
 
 /// A type that can register event listeners.
 pub trait EventTarget {
@@ -8,13 +7,13 @@ pub trait EventTarget {
     fn on<S, F>(&self, event_type: S, f: F)
     where
         S: Into<Cow<'static, str>>,
-        F: FnMut(&Event) + 'static;
+        F: FnMut(Event) + Clone + 'static;
 
     /// Register an event listener that will be called at most once.
     fn once<S, F>(&self, event_type: S, f: F)
     where
         S: Into<Cow<'static, str>>,
-        F: FnOnce(&Event) + 'static;
+        F: FnOnce(Event) + 'static;
 }
 
 impl<T> EventTarget for T
@@ -24,7 +23,7 @@ where
     fn on<S, F>(&self, event_type: S, f: F)
     where
         S: Into<Cow<'static, str>>,
-        F: FnMut(&Event) + 'static,
+        F: FnMut(Event) + Clone + 'static,
     {
         EventListener::listen(self.as_ref(), event_type, f).forget();
     }
@@ -32,7 +31,7 @@ where
     fn once<S, F>(&self, event_type: S, f: F)
     where
         S: Into<Cow<'static, str>>,
-        F: FnOnce(&Event) + 'static,
+        F: FnOnce(Event) + 'static,
     {
         EventListener::listen_once(self.as_ref(), event_type, f).forget();
     }
