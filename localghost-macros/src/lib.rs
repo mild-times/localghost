@@ -31,7 +31,7 @@ pub fn main(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let inputs = &input.sig.inputs;
     let name = &input.sig.ident;
     let body = &input.block;
-    let attrs = &input.attrs;
+    // let attrs = &input.attrs;
 
     if name != "main" {
         return TokenStream::from(quote_spanned! { name.span() =>
@@ -52,14 +52,11 @@ pub fn main(_attr: TokenStream, item: TokenStream) -> TokenStream {
 
     let result = quote! {
         #[wasm_bindgen(start)]
-        pub fn main() #ret {
+        pub fn main() {
             ::localghost::macro_export::set_panic_hook();
             ::localghost::log::Logger::new().start().unwrap_throw();
 
-            #(#attrs)*
-            async fn main(#inputs) #ret {
-                #body
-            }
+            async fn main(#inputs) #ret #body
 
             localghost::task::spawn_local(async {
                 main().await#end;

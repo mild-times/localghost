@@ -44,7 +44,10 @@ pub struct EventSource {
 impl EventSource {
     /// Create a new instance of `EventSource` and wait for a connection to be
     /// established.
-    pub async fn connect(url: &str) -> io::Result<Self> {
+    pub async fn connect<S>(url: &str, interests: &[S]) -> io::Result<Self>
+    where
+        S: AsRef<str>,
+    {
         crate::log::debug!("EventSource({}): connection initiated", url);
 
         // Initialize the internal url state.
@@ -74,7 +77,7 @@ impl EventSource {
 
         // Create the instance and check for errors.
         let (sender, receiver) = channel::unbounded();
-        let this = Self {
+        let mut this = Self {
             url,
             inner,
             err_listener,
@@ -83,6 +86,10 @@ impl EventSource {
             reconnect,
             listeners: vec![],
         };
+        for interest in interests {
+            let s = interest.as_ref();
+            this.register(s);
+        }
         this.check_connection()?;
 
         // All done :~)
@@ -103,10 +110,11 @@ impl EventSource {
     }
 
     /// Register interest in an event.
-    pub fn register(&mut self, name: &'static str) {
+    pub fn register(&mut self, name: &str) {
         let sender = self.sender.clone();
+        let name2 = name.to_owned();
         let listener = EventListener::listen(&self.inner, name.clone(), move |ev| {
-            let ev = MessageEvent::from_event(name.to_owned(), ev);
+            let ev = MessageEvent::from_event(name2.clone(), ev);
             let _ = sender.try_send(ev);
         });
         self.listeners.push(listener);
