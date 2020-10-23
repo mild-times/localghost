@@ -3,7 +3,7 @@ name = "localghost-counter"
 version = "0.1.0"
 authors = [
   "Yoshua Wuyts <yoshuawuyts@gmail.com>",
-  "Nick Fitzgerald <fitzgen@gmail.com>", # Authored dodrio and its examples
+  "Nick Fitzgerald <fitzgen@gmail.com>", # Authored dodrio and the original examples
 ]
 edition = "2018"
 

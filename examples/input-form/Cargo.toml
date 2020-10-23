@@ -1,5 +1,5 @@
 [package]
-name = "localghost-hello-world"
+name = "localghost-input-form"
 version = "0.1.0"
 authors = [
   "Yoshua Wuyts <yoshuawuyts@gmail.com>",

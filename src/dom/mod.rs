@@ -1,4 +1,4 @@
-//! The root element of the web page.
+//! The browser's Document Object Model.
 
 use crate::events::EventTarget;
 use crate::prelude::*;
