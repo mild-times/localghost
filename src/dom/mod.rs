@@ -1,4 +1,18 @@
 //! The browser's Document Object Model.
+//!
+//! # Examples
+//!
+//! ```no_run
+//! use localghost::prelude::*;
+//! use localghost::dom::{Element, ElementKind, Text};
+//!
+//! #[localghost::main]
+//! async fn main() {
+//!     let p = Element::with_text(ElementKind::P, "Hello world");
+//!     let body = localghost::document().body();
+//!     body.append_child(p);
+//! }
+//! ```
 
 use crate::events::EventTarget;
 use crate::prelude::*;
@@ -11,29 +25,13 @@ pub use element::Element;
 pub use element_kind::ElementKind;
 pub use query_selector::query_selector;
 pub use text::Text;
-pub use window::{window, Window};
+pub use window::Window;
 
 mod element;
 mod element_kind;
 mod query_selector;
 mod text;
 mod window;
-
-/// Access the browser's `Document` object.
-///
-/// # Errors
-///
-/// This function panics if a `Document` is not found.
-///
-/// # Example
-///
-/// ```no_run
-/// let doc = localghost::document();
-/// # drop(doc)
-/// ```
-pub fn document() -> Document {
-    Document::new()
-}
 
 /// A reference to the root document.
 #[derive(Debug)]
@@ -44,7 +42,7 @@ pub struct Document {
 impl Document {
     /// Create a new `Document`.
     pub fn new() -> Self {
-        let doc = window()
+        let doc = crate::window()
             .document()
             .expect_throw("Could not find `window.document`");
         Self { doc }

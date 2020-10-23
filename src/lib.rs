@@ -31,10 +31,7 @@ pub mod task;
 
 mod history;
 
-#[doc(inline)]
-pub use dom::{document, window};
 pub use history::History;
-
 #[doc(inline)]
 pub use localghost_macros::main;
 
@@ -48,4 +45,36 @@ pub mod raw {
     pub use js_sys;
     pub use wasm_bindgen;
     pub use web_sys;
+}
+
+/// Access the browser's `Document` object.
+///
+/// # Errors
+///
+/// This function panics if a `Document` is not found.
+///
+/// # Example
+///
+/// ```no_run
+/// let doc = localghost::document();
+/// # drop(doc)
+/// ```
+pub fn document() -> dom::Document {
+    dom::Document::new()
+}
+
+/// Access the browser's `Window` object.
+///
+/// # Errors
+///
+/// This function panics if a `Window` is not found.
+///
+/// # Example
+///
+/// ```no_run
+/// let window = localghost::window();
+/// # drop(window)
+/// ```
+pub fn window() -> dom::Window {
+    dom::Window::new()
 }

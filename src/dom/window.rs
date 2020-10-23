@@ -2,22 +2,6 @@ use std::ops::{Deref, DerefMut};
 
 use crate::prelude::*;
 
-/// Access the browser's `Window` object.
-///
-/// # Errors
-///
-/// This function panics if a `Window` is not found.
-///
-/// # Example
-///
-/// ```no_run
-/// let window = localghost::window();
-/// # drop(window)
-/// ```
-pub fn window() -> Window {
-    Window::new()
-}
-
 /// A reference to the `Window` object.
 #[derive(Debug)]
 pub struct Window {
