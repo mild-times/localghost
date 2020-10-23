@@ -41,7 +41,6 @@ pub use localghost_macros::main;
 #[doc(hidden)]
 pub mod macro_export {
     pub use console_error_panic_hook::set_once as set_panic_hook;
-    pub use wasm_bindgen;
 }
 
 /// Raw bindings to JS and the DOM.
