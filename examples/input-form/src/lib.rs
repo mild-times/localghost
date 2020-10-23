@@ -1,5 +1,5 @@
+use localghost::dom::{query_selector, Element, ElementKind};
 use localghost::prelude::*;
-use localghost::dom::{Element, ElementKind, query_selector};
 use localghost::raw::web_sys;
 
 #[localghost::main]
