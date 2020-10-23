@@ -55,7 +55,7 @@ pub fn main(_attr: TokenStream, item: TokenStream) -> TokenStream {
         #[::localghost::macro_export::wasm_bindgen(start)]
         pub fn main() #ret {
             ::localghost::macro_export::set_panic_hook();
-            ::localghost::log::Logger::new().start();
+            ::localghost::log::Logger::new().start().unwrap_throw();
 
             #(#attrs)*
             async fn main(#inputs) #ret {
