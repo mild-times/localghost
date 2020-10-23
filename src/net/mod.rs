@@ -6,4 +6,4 @@ mod sse;
 
 pub use beacon::Beacon;
 pub use fetch::{Headers, HeadersIter, Request, Response};
-pub use sse::{EventSource, ReadyState};
+pub use sse::{EventSource, MessageEvent, ReadyState};
