@@ -56,7 +56,7 @@ impl Request {
     ///
     /// # Errors
     ///
-    /// An error may be returned if the underlying connection errors out.
+    /// An error may be returned if the underlying connection returns an error.
     pub async fn send(mut self) -> Result<Response, io::Error> {
         // Attach the headers to the request data.
         self.init.headers(self.headers.as_ref());
