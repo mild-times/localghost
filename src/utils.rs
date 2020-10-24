@@ -1,3 +1,4 @@
+use crate::prelude::*;
 use std::io;
 
 /// Convert a `Result<T, JsValue>` to an `io::Result<T>`.
@@ -13,4 +14,9 @@ impl<T> ResultExt<T> for Result<T, wasm_bindgen::JsValue> {
             io::Error::new(kind, msg)
         })
     }
+}
+
+/// Get a `web_sys::Window`.
+pub(crate) fn window() -> web_sys::Window {
+    web_sys::window().expect_throw("should have a `Window` on the Web")
 }

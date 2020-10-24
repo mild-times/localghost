@@ -71,6 +71,6 @@ impl<T> Future for JoinHandle<T> {
 //     }) as Box<dyn FnOnce()>);
 
 //     web_sys::console::time_log();
-//     let _ = crate::window().request_idle_callback(f2.as_ref().unchecked_ref());
+//     let _ = crate::utils::window().request_idle_callback(f2.as_ref().unchecked_ref());
 //     JoinHandle { receiver }
 // }

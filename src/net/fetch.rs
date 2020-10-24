@@ -27,10 +27,9 @@ impl Request {
     }
 
     /// Submit a request
-    // TODO(yoshuawuyts): turn this into a `Future` impl on `Request` instead.
     pub async fn send(self) -> Result<Response, io::Error> {
         // Send the request.
-        let window = crate::window();
+        let window = crate::utils::window();
         let request = web_sys::Request::new_with_str_and_init(&self.url, &self.init).unwrap();
         let promise = window.fetch_with_request(&request);
         let resp = JsFuture::from(promise).await.unwrap();

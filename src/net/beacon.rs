@@ -27,7 +27,7 @@ impl Beacon {
     /// Create a new instance.
     pub fn new(url: String) -> Self {
         Self {
-            nav: crate::window().navigator(),
+            nav: crate::utils::window().navigator(),
             url,
         }
     }

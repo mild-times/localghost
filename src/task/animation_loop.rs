@@ -43,7 +43,7 @@ impl Stream for AnimationLoop {
     type Item = ();
     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
         if let None = self.receiver {
-            let window = crate::window();
+            let window = crate::utils::window();
             let (sender, receiver) = channel();
             let f = Closure::once(move || sender.send(()).unwrap_throw());
             let id = window
@@ -78,7 +78,9 @@ impl Debug for AnimationLoop {
 impl Drop for AnimationLoop {
     fn drop(&mut self) {
         if let Some(id) = self.id {
-            crate::window().cancel_animation_frame(id).unwrap_throw();
+            crate::utils::window()
+                .cancel_animation_frame(id)
+                .unwrap_throw();
         }
     }
 }

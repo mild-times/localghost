@@ -59,7 +59,7 @@ impl History {
         );
 
         Self {
-            inner: crate::window().history().unwrap_throw(),
+            inner: crate::utils::window().history().unwrap_throw(),
         }
     }
 
@@ -91,7 +91,7 @@ impl History {
     /// This moves the history cursor backward.
     pub async fn pop(&mut self) {
         let (sender, receiver) = channel();
-        let _listener = crate::window().once("popstate", move |_| {
+        let _listener = crate::utils::window().once("popstate", move |_| {
             sender.send(()).unwrap();
         });
         self.inner.back().unwrap_throw();
@@ -117,7 +117,7 @@ impl History {
     /// This moves the history cursor forward.
     pub async fn forward(&mut self) {
         let (sender, receiver) = channel();
-        let _listener = crate::window().once("popstate", move |_| {
+        let _listener = crate::utils::window().once("popstate", move |_| {
             sender.send(()).unwrap();
         });
         self.inner.forward().unwrap_throw();

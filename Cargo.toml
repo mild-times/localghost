@@ -38,6 +38,7 @@ features = [
     "Event",
     "EventSource",
     "EventTarget",
+    "Location",
     "Headers",
     "History",
     "HtmlElement",
