@@ -5,7 +5,7 @@ use js_sys::{ArrayBuffer, Uint8Array};
 use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
 
-use crate::net::Headers;
+use crate::net::{Headers, HeadersIter};
 use crate::prelude::*;
 use crate::utils::ResultExt;
 
@@ -13,17 +13,15 @@ use crate::utils::ResultExt;
 #[derive(Debug)]
 pub struct Response {
     inner: web_sys::Response,
+    headers: Headers,
 }
 
 impl Response {
     /// Create a new instance of `Response`.
     pub(crate) fn new(res: web_sys::Response) -> Self {
-        Self { inner: res }
-    }
-
-    /// Access the HTTP headers.
-    pub fn headers(&self) -> Headers {
-        Headers::new(self.inner.headers())
+        let headers = Headers::new(res.headers());
+        let inner = res;
+        Self { inner, headers }
     }
 
     /// Get the HTTP return status code.
@@ -59,5 +57,10 @@ impl Response {
         slice.copy_to(&mut buf);
 
         Ok(buf)
+    }
+
+    /// Get an iterator over all headers.
+    pub fn headers(&self) -> HeadersIter {
+        self.headers.iter()
     }
 }

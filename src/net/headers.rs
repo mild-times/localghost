@@ -1,11 +1,13 @@
 use js_sys::{Array, Reflect};
 
 use std::fmt::{self, Debug};
-use std::iter::{IntoIterator, Iterator};
+use std::iter::Iterator;
+
+use crate::prelude::*;
 
 /// HTTP Headers.
 #[derive(Debug)]
-pub struct Headers {
+pub(crate) struct Headers {
     headers: web_sys::Headers,
 }
 
@@ -14,18 +16,16 @@ impl Headers {
     pub(crate) fn new(headers: web_sys::Headers) -> Self {
         Self { headers }
     }
-}
 
-impl IntoIterator for Headers {
-    type Item = (String, String);
-    type IntoIter = HeadersIter;
-
-    fn into_iter(self) -> Self::IntoIter {
+    pub(crate) fn iter(&self) -> HeadersIter {
         HeadersIter {
-            iter: js_sys::try_iter(&self.headers).unwrap().unwrap(),
+            iter: js_sys::try_iter(self.headers.as_ref())
+                .unwrap_throw()
+                .unwrap_throw(),
         }
     }
 }
+
 /// HTTP Headers Iterator.
 pub struct HeadersIter {
     iter: js_sys::IntoIter,
