@@ -37,7 +37,12 @@ impl Response {
     ///
     /// This consumes `self` to ensure that the body stream will not throw a
     /// `lock` error.
-    pub async fn into_bytes(self) -> io::Result<Vec<u8>> {
+    ///
+    /// # Errors
+    ///
+    /// An `io::ErrorKind::ConnectionAborted` error will be returned if a
+    /// connection error occurred.
+    pub async fn body_bytes(self) -> io::Result<Vec<u8>> {
         let promise = self.inner.array_buffer().unwrap_throw();
 
         // Connections can be "locked" or "disturbed". Because we consume `self`
