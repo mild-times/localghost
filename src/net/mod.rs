@@ -1,11 +1,17 @@
 //! Browser networking APIs
 
 mod beacon;
+mod body;
 mod event_source;
-mod fetch;
+mod headers;
 mod message_event;
+mod request;
+mod response;
 
 pub use beacon::Beacon;
+pub use body::Body;
 pub use event_source::{EventSource, ReadyState};
-pub use fetch::{Headers, HeadersIter, Request, Response};
+pub use headers::{Headers, HeadersIter};
 pub use message_event::MessageEvent;
+pub use request::Request;
+pub use response::Response;

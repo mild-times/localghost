@@ -45,6 +45,7 @@ features = [
     "HtmlInputElement",
     "Navigator",
     "NodeList",
+    "ReadableStream",
     "Request",
     "RequestInit",
     "Response",
