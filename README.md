@@ -1,7 +1,14 @@
-<h1 align="center">localghost</h1>
+<!-- <h1 align="center">localghost</h1> -->
+
+<br />
+
+<div align="center">
+  <img src="assets/localghost.png" title="localghost logo" alt="localghost logo very spooky" width="730"/>
+</div>
+
 <div align="center">
   <strong>
-    API bindings for Web APIs
+    Safe Rust bindings to the Web platform.
   </strong>
 </div>
 
@@ -25,6 +32,8 @@
   </a>
 </div>
 
+<br />
+
 <div align="center">
   <h3>
     <a href="https://docs.rs/localghost">
@@ -41,20 +50,13 @@
   </h3>
 </div>
 
-<br />
-
-<div align="center">
-  <img src="assets/localghost.png" title="localghost logo" alt="localghost logo very spooky" width="730"/>
-</div>
-
 ## Installation
 ```sh
 $ cargo add localghost
 ```
 
 ## Safety
-This crate uses ``#![deny(unsafe_code)]`` to ensure everything is implemented in
-100% Safe Rust.
+This crate makes use of `unsafe` for dynamic casts between JavaScript classes.
 
 ## Contributing
 Want to join us? Check out our ["Contributing" guide][contributing] and take a
