@@ -6,23 +6,21 @@ use wasm_bindgen_futures::JsFuture;
 
 use crate::net::Response;
 use crate::prelude::*;
-use crate::utils::ResultExt;
+use crate::utils::{self, ResultExt};
 
 /// An HTTP Fetch Request.
 #[derive(Debug)]
 pub struct Request {
+    method: String,
     headers: web_sys::Headers,
-    init: web_sys::RequestInit,
     url: String,
 }
 
 impl Request {
     /// Create a new instance.
     pub fn new(method: &str, url: &str) -> Self {
-        let mut init = web_sys::RequestInit::new();
-        init.method(method);
         Self {
-            init,
+            method: method.to_owned(),
             url: url.to_owned(),
             headers: web_sys::Headers::new().unwrap_throw(),
         }
@@ -57,20 +55,18 @@ impl Request {
     /// # Errors
     ///
     /// An error may be returned if the underlying connection returns an error.
-    pub async fn send(mut self) -> Result<Response, io::Error> {
-        // Attach the headers to the request data.
-        self.init.headers(self.headers.as_ref());
+    pub async fn send(self) -> Result<Response, io::Error> {
+        // Initialize the request config.
+        let mut init = web_sys::RequestInit::new();
+        init.method(&self.method);
+        init.headers(self.headers.as_ref());
 
         // Send the request.
-        let window = crate::utils::window();
-        let request = web_sys::Request::new_with_str_and_init(&self.url, &self.init).unwrap();
-        let promise = window.fetch_with_request(&request);
-        let resp = JsFuture::from(promise)
-            .await
-            .err_kind(io::ErrorKind::Other)?;
-        debug_assert!(resp.is_instance_of::<web_sys::Response>());
-        let res: web_sys::Response = resp.dyn_into().unwrap();
+        let req = web_sys::Request::new_with_str_and_init(&self.url, &init).unwrap_throw();
+        let fut = JsFuture::from(utils::window().fetch_with_request(&req));
+        let res = fut.await.err_kind(io::ErrorKind::Other)?;
+        debug_assert!(res.is_instance_of::<web_sys::Response>());
 
-        Ok(Response::new(res))
+        Ok(Response::new(res.dyn_into().unwrap_throw()))
     }
 }
