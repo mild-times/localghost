@@ -8,18 +8,18 @@ use crate::prelude::*;
 /// HTTP Headers.
 #[derive(Debug)]
 pub(crate) struct Headers {
-    headers: web_sys::Headers,
+    pub(crate) inner: web_sys::Headers,
 }
 
 impl Headers {
     /// Create a new instance of `Headers`.
     pub(crate) fn new(headers: web_sys::Headers) -> Self {
-        Self { headers }
+        Self { inner: headers }
     }
 
     pub(crate) fn iter(&self) -> HeadersIter {
         HeadersIter {
-            iter: js_sys::try_iter(self.headers.as_ref())
+            iter: js_sys::try_iter(self.inner.as_ref())
                 .unwrap_throw()
                 .unwrap_throw(),
         }
