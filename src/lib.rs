@@ -1,4 +1,4 @@
-//! <img width="730" alt="localghost logo" src="https://user-images.githubusercontent.com/2467194/97103696-5ddfca00-16ae-11eb-9864-3a2c21188555.png">
+//! <div align="center"><img width="730" alt="localghost logo" src="https://user-images.githubusercontent.com/2467194/97103696-5ddfca00-16ae-11eb-9864-3a2c21188555.png"></div>
 //!
 //! Safe Rust bindings to the Web platform.
 //!
