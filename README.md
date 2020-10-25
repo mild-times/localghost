@@ -41,6 +41,12 @@
   </h3>
 </div>
 
+<br />
+
+<div align="center">
+  <img src="assets/localghost.png" title="localghost logo" alt="localghost logo very spooky" width="730"/>
+</div>
+
 ## Installation
 ```sh
 $ cargo add localghost
