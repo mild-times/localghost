@@ -55,9 +55,6 @@ impl LocalStorage {
 
     /// Returns a reference to the value corresponding to the key.
     pub fn get(&self, key: &str) -> Option<String> {
-        match self.storage.get_item(key) {
-            Ok(v) => v,
-            Err(_) => None,
-        }
+        self.storage.get_item(key).ok()
     }
 }
