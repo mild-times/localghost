@@ -1,4 +1,19 @@
 //! Browser networking APIs
+//!
+//! # Examples
+//!
+//! ```no_run
+//! use localghost::prelude::*;
+//! use localghost::{log, net};
+//! use std::io;
+//!
+//! #[localghost::main]
+//! async fn main() -> io::Result<()> {
+//!     let res = net::Request::new("GET", "https://example.com").send().await?;
+//!     log::info!("responded with {:?}", res.status_code());
+//!     Ok(())
+//! }
+//! ```
 
 mod beacon;
 mod body;
