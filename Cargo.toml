@@ -49,6 +49,7 @@ features = [
     "Request",
     "RequestInit",
     "Response",
+    "Storage",
     "Text",
     "Window",
 ]
