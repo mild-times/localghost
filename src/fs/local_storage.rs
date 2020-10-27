@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use crate::utils;
+use crate::utils::{window, ResultExt};
 use std::io;
 
 /// Access a persistent storage object for the Document's origin.
@@ -18,13 +18,46 @@ impl LocalStorage {
     /// This function will return an error if a request violates a policy decision, or the origin
     /// is not a valid scheme/host/port tuple.
     pub fn open() -> io::Result<Self> {
-        let window = utils::window();
-        match window.local_storage() {
+        match window().local_storage() {
             Ok(Some(storage)) => Ok(Self { storage }),
             _ => Err(io::Error::new(
                 io::ErrorKind::PermissionDenied,
                 "Unable to access local Storage object.",
             )),
+        }
+    }
+
+    /// Returns the number of elements in local Storage.
+    pub fn len(&self) -> usize {
+        self.storage.length().unwrap_throw() as usize
+    }
+
+    /// Clears local Storage, removing all key-value pairs.
+    pub fn clear(&self) {
+        self.storage.clear().unwrap_throw()
+    }
+
+    /// Inserts a key-value pair into the local Storage.
+    ///
+    /// # Errors
+    ///
+    /// This function may throw an exception if the storage is full.
+    pub fn insert(&self, key: &str, val: &str) -> io::Result<()> {
+        self.storage
+            .set_item(key, val)
+            .err_kind(io::ErrorKind::Other)
+    }
+
+    /// Removes a key from the local Storage.
+    pub fn remove(&self, key: &str) {
+        self.storage.remove_item(key).unwrap_throw()
+    }
+
+    /// Returns a reference to the value corresponding to the key.
+    pub fn get(&self, key: &str) -> Option<String> {
+        match self.storage.get_item(key) {
+            Ok(v) => v,
+            Err(_) => None,
         }
     }
 }
