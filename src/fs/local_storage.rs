@@ -49,12 +49,14 @@ impl LocalStorage {
     }
 
     /// Removes a key from the local Storage.
-    pub fn remove(&self, key: &str) {
-        self.storage.remove_item(key).unwrap_throw()
+    pub fn remove(&self, key: &str) -> Option<String> {
+        let val = self.get(key);
+        self.storage.remove_item(key).unwrap_throw();
+        val
     }
 
     /// Returns a reference to the value corresponding to the key.
     pub fn get(&self, key: &str) -> Option<String> {
-        self.storage.get_item(key).ok()
+        self.storage.get_item(key).ok().flatten()
     }
 }
