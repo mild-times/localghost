@@ -32,6 +32,11 @@ impl LocalStorage {
         self.storage.length().unwrap_throw() as usize
     }
 
+    /// Returns true if the Storage contains no elements.
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     /// Clears local Storage, removing all key-value pairs.
     pub fn clear(&self) {
         self.storage.clear().unwrap_throw()
