@@ -22,6 +22,7 @@
 
 pub mod dom;
 pub mod events;
+pub mod fs;
 pub mod log;
 pub mod net;
 pub mod prelude;
