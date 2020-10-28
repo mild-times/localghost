@@ -17,13 +17,58 @@ pub struct Request {
 }
 
 impl Request {
-    /// Create a new instance.
+    /// Create a new `Request`.
     pub fn new(method: &str, url: &str) -> Self {
         Self {
             method: method.to_owned(),
             url: url.to_owned(),
             headers: web_sys::Headers::new().unwrap_throw(),
         }
+    }
+
+    /// Create a new `CONNECT` `Request`.
+    pub fn connect(url: &str) -> Self {
+        Self::new("CONNECT", url)
+    }
+
+    /// Create a new `DELETE` `Request`.
+    pub fn delete(url: &str) -> Self {
+        Self::new("DELETE", url)
+    }
+
+    /// Create a new `GET` `Request`.
+    pub fn get(url: &str) -> Self {
+        Self::new("GET", url)
+    }
+
+    /// Create a new `HEAD` `Request`.
+    pub fn head(url: &str) -> Self {
+        Self::new("HEAD", url)
+    }
+
+    /// Create a new `OPTIONS` `Request`.
+    pub fn options(url: &str) -> Self {
+        Self::new("OPTIONS", url)
+    }
+
+    /// Create a new `PATCH` `Request`.
+    pub fn patch(url: &str) -> Self {
+        Self::new("PATCH", url)
+    }
+
+    /// Create a new `POST` `Request`.
+    pub fn post(url: &str) -> Self {
+        Self::new("POST", url)
+    }
+
+    /// Create a new `PUT` `Request`.
+    pub fn put(url: &str) -> Self {
+        Self::new("PUT", url)
+    }
+
+    /// Create a new `TRACE` `Request`.
+    pub fn trace(url: &str) -> Self {
+        Self::new("TRACE", url)
     }
 
     /// Get a header.

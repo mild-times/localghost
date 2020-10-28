@@ -11,7 +11,7 @@
 //!
 //! #[localghost::main]
 //! async fn main() -> io::Result<()> {
-//!     let res = net::Request::new("GET", "https://example.com").send().await?;
+//!     let res = net::Request::get("https://example.com").send().await?;
 //!     log::info!("responded with {:?}", res.status_code());
 //!     Ok(())
 //! }
