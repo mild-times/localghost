@@ -13,11 +13,13 @@ async fn main() -> io::Result<()> {
 
     // Create a table
     let table = Element::new(ElementKind::Table);
+    dom::body().append_child(&table);
+
+    // Create the headings
     let tr = Element::new(ElementKind::Tr);
     tr.append_child(Element::with_text(ElementKind::Th, "name"));
     tr.append_child(Element::with_text(ElementKind::Th, "data"));
     table.append_child(tr);
-    dom::body().append_child(&table);
 
     // For every event in the `EventSource` add an entry to the table.
     while let Some(ev) = sse.next().await.transpose()? {
