@@ -96,12 +96,9 @@ impl History {
     ///
     /// This moves the history cursor backward.
     pub async fn pop(&self) {
-        let (sender, receiver) = channel();
-        let _listener = crate::utils::window().once("popstate", move |_| {
-            sender.send(()).unwrap();
-        });
+        let fut = crate::utils::window().once("popstate");
         self.inner.back().unwrap_throw();
-        receiver.await.unwrap();
+        fut.await;
     }
 
     /// Replace the url currently on the stack with another url.

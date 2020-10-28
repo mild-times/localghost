@@ -2,7 +2,6 @@ use crate::dom::{Element, ElementKind};
 use crate::events::EventTarget;
 use crate::prelude::*;
 
-use futures_channel::oneshot::channel;
 use std::ops::{Deref, DerefMut};
 
 /// A reference to the root document.
@@ -50,11 +49,7 @@ impl Document {
     pub async fn ready(&self) {
         match self.ready_state().as_str() {
             "complete" | "interactive" => return,
-            _ => {
-                let (sender, receiver) = channel();
-                let _listener = self.once("DOMContentLoaded", move |_| sender.send(()).unwrap());
-                receiver.await.unwrap();
-            }
+            _ => self.once("DOMContentLoaded").await,
         };
     }
 }
