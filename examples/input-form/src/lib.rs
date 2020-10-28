@@ -1,11 +1,11 @@
-use localghost::dom::{query_selector, Element, ElementKind};
+use localghost::dom::{query_selector, self, Element, ElementKind};
 use localghost::prelude::*;
 use localghost::raw::web_sys;
 
 #[localghost::main]
 async fn main() {
     // Access the document's `<body>`.
-    let body = localghost::document().body();
+    let body = dom::body();
 
     // Create an `<input>` field
     let input = Element::new(ElementKind::Input);

@@ -5,7 +5,7 @@ use crate::prelude::*;
 
 /// Return the first element that matches the query.
 pub fn query_selector(selectors: &str) -> Option<Element> {
-    crate::document()
+    crate::utils::document()
         .query_selector(selectors)
         .unwrap_throw()
         .map(|el| {
@@ -18,7 +18,7 @@ pub fn query_selector(selectors: &str) -> Option<Element> {
 // `Element` using runtime reflection. Maybe something for Ira?
 // /// Return the first element that matches the query.
 // pub fn query_selector_all(selectors: &str) -> Vec<Element> {
-//     let list = crate::document()
+//     let list = crate::utils::document()
 //         .query_selector_all(selectors)
 //         .unwrap_throw();
 

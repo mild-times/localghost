@@ -13,7 +13,7 @@ pub struct Element {
 impl Element {
     /// Create a new instance.
     pub fn new(kind: ElementKind) -> Self {
-        let el = crate::document()
+        let el = crate::utils::document()
             .create_element(kind.as_str())
             .unwrap_throw();
         Self { kind, el }
@@ -21,7 +21,7 @@ impl Element {
 
     /// Create a new instance with an internal text node.
     pub fn with_text(kind: ElementKind, text: &str) -> Self {
-        let el = crate::document()
+        let el = crate::utils::document()
             .create_element(kind.as_str())
             .unwrap_throw();
         let this = Self { kind, el };

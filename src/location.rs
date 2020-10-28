@@ -1,5 +1,5 @@
-use crate::document;
 use crate::prelude::*;
+use crate::utils::document;
 use crate::utils::ResultExt;
 
 use std::{fmt, io};

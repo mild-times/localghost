@@ -4,13 +4,12 @@
 //!
 //! ```no_run
 //! use localghost::prelude::*;
-//! use localghost::dom::{Element, ElementKind, Text};
+//! use localghost::dom::{self, Element, ElementKind};
 //!
 //! #[localghost::main]
 //! async fn main() {
 //!     let p = Element::with_text(ElementKind::P, "Hello world");
-//!     let body = localghost::document().body();
-//!     body.append_child(p);
+//!     dom::body().append_child(p);
 //! }
 //! ```
 
@@ -28,3 +27,14 @@ mod element_kind;
 mod query_selector;
 mod text;
 mod window;
+
+use crate::prelude::*;
+
+/// Get the document's body.
+pub fn body() -> Element {
+    let el = crate::utils::document()
+        .query_selector("body")
+        .expect_throw("Could not find `window.body`")
+        .expect_throw("Could not find `window.body`");
+    unsafe { Element::from_raw(ElementKind::Body, el) }
+}

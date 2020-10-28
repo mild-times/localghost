@@ -1,5 +1,5 @@
 use localghost::prelude::*;
-use localghost::dom::{Element, ElementKind, query_selector};
+use localghost::dom::{self, Element, ElementKind, query_selector};
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -10,7 +10,7 @@ async fn main() {
     localghost::log::Logger::new().start().unwrap_throw();
 
     let counter = Rc::new(RefCell::new(0isize));
-    let body = localghost::document().body();
+    let body = dom::body();
 
     let button = Element::with_text(ElementKind::Button, "+");
     let count_handle = counter.clone();

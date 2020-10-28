@@ -7,7 +7,7 @@ pub struct Text {
 impl Text {
     /// Create a new instance.
     pub fn new(text: &str) -> Self {
-        let inner = crate::document().create_text_node(text);
+        let inner = crate::utils::document().create_text_node(text);
         Self { inner }
     }
 }

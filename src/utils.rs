@@ -20,3 +20,10 @@ impl<T> ResultExt<T> for Result<T, wasm_bindgen::JsValue> {
 pub(crate) fn window() -> web_sys::Window {
     web_sys::window().expect_throw("should have a `Window` on the Web")
 }
+
+/// Get a `web_sys::Document`.
+pub(crate) fn document() -> web_sys::Document {
+    window()
+        .document()
+        .expect_throw("Could not find `window.document`")
+}

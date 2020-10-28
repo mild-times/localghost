@@ -1,4 +1,4 @@
-use localghost::dom::{Element, ElementKind};
+use localghost::dom::{self, Element, ElementKind};
 use localghost::prelude::*;
 use localghost::net::EventSource;
 
@@ -17,7 +17,7 @@ async fn main() -> io::Result<()> {
     tr.append_child(Element::with_text(ElementKind::Th, "name"));
     tr.append_child(Element::with_text(ElementKind::Th, "data"));
     table.append_child(tr);
-    localghost::document().body().append_child(&table);
+    dom::body().append_child(&table);
 
     // For every event in the `EventSource` add an entry to the table.
     while let Some(ev) = sse.next().await.transpose()? {
