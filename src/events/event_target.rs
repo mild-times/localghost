@@ -7,7 +7,8 @@ use crate::events::{Event, EventListener};
 use crate::prelude::*;
 
 use async_channel::{bounded, Receiver};
-use async_std::task::ready;
+use async_std::{prelude::Stream, task::ready};
+use pin_project::pin_project;
 
 /// A type that can register event listeners.
 pub trait EventTarget: AsRef<web_sys::EventTarget> {
@@ -29,7 +30,7 @@ pub trait EventTarget: AsRef<web_sys::EventTarget> {
         let listener = EventListener::listen(self, event_type, move |ev| {
             sender.try_send(ev).unwrap_throw()
         });
-        todo!();
+        EventStream { listener, receiver }
     }
 
     /// Wait for a single event.
@@ -47,6 +48,7 @@ pub trait EventTarget: AsRef<web_sys::EventTarget> {
 }
 
 /// A `Future` returned by `EventTarget::once`.
+#[must_use = "Futures do nothing unless awaited"]
 pub struct EventFuture {
     listener: EventListener,
     receiver: Option<Receiver<Event>>,
@@ -56,7 +58,7 @@ pub struct EventFuture {
 impl Future for EventFuture {
     type Output = Event;
 
-    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         if self.fut.is_none() {
             let receiver = self.receiver.take().unwrap_throw();
             self.fut = Some(Box::pin(
@@ -80,8 +82,23 @@ impl Debug for EventFuture {
 }
 
 /// A `Future` returned by `EventTarget::on`.
+#[pin_project]
 #[derive(Debug)]
-pub struct EventStream;
+#[must_use = "Streams do nothing unless awaited"]
+pub struct EventStream {
+    listener: EventListener,
+    #[pin]
+    receiver: Receiver<Event>,
+}
+
+impl Stream for EventStream {
+    type Item = Event;
+
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        let this = self.project();
+        this.receiver.poll_next(cx)
+    }
+}
 
 impl<T> EventTarget for T
 where

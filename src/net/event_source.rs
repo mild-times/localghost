@@ -95,7 +95,7 @@ impl EventSource {
         let url2 = url.clone();
         let inner2 = inner.clone();
         let reconnect2 = reconnect.clone();
-        let err_listener = inner.on("error", move |_| {
+        let err_listener = inner.on_with("error", move |_| {
             crate::log::debug!("EventSource({}): remote closed", url2);
             if reconnect2.load(Ordering::SeqCst) == false {
                 crate::log::debug!("EventSource({}): instance closed", url2);
@@ -106,10 +106,7 @@ impl EventSource {
         });
 
         // Wait to open.
-        let (sender, receiver) = channel::bounded(1);
-        let listener = inner.once("open", move |_| sender.try_send(()).unwrap_throw());
-        receiver.recv().await.unwrap_throw();
-        drop(listener);
+        inner.once("open").await;
 
         // Create the instance and check for errors.
         let (sender, receiver) = channel::unbounded();

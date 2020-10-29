@@ -11,7 +11,7 @@ async fn main() {
     let input = Element::new(ElementKind::Input);
     input.set_attribute("type", "text");
     input.set_attribute("placeholder", "What's your name?");
-    input.on("input", |ev| {
+    input.on_with("input", |ev| {
         if let Some(target) = ev.target::<web_sys::HtmlInputElement>() {
             let el = query_selector("#text").unwrap_throw();
             el.set_text_content(Some(&target.value()));

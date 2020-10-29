@@ -13,7 +13,7 @@ async fn main() -> io::Result<()> {
 
     let button = Element::with_text(ElementKind::Button, "back");
     button
-        .on("click", move |_| {
+        .on_with("click", move |_| {
             task::spawn_local(async {
                 History::new().pop().await;
                 log::info("history popped");
@@ -24,7 +24,7 @@ async fn main() -> io::Result<()> {
 
     let button = Element::with_text(ElementKind::Button, "hello");
     button
-        .on("click", move |_| {
+        .on_with("click", move |_| {
             task::spawn_local(async {
                 History::new().push("/hello").await;
                 log::info("history pushed");
@@ -35,7 +35,7 @@ async fn main() -> io::Result<()> {
 
     let button = Element::with_text(ElementKind::Button, "goodbye");
     button
-        .on("click", move |_| {
+        .on_with("click", move |_| {
             task::spawn_local(async {
                 History::new().push("/goodbye").await;
                 log::info("history pushed");

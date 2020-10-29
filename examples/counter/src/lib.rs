@@ -14,7 +14,7 @@ async fn main() {
 
     let button = Element::with_text(ElementKind::Button, "+");
     let count_handle = counter.clone();
-    button.on("click", move |_| {
+    button.on_with("click", move |_| {
         let mut handle = count_handle.borrow_mut();
         *handle += 1;
         let el = query_selector("#counter").unwrap_throw();
@@ -28,7 +28,7 @@ async fn main() {
 
     let button = Element::with_text(ElementKind::Button, "-");
     let count_handle = counter.clone();
-    button.on("click", move |_| {
+    button.on_with("click", move |_| {
         let mut handle = count_handle.borrow_mut();
         *handle -= 1;
         let el = query_selector("#counter").unwrap_throw();

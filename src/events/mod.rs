@@ -8,4 +8,4 @@ mod event_target;
 pub use event::Event;
 pub use event_listener::{Builder, EventListener};
 pub use event_phase::EventPhase;
-pub use event_target::EventTarget;
+pub use event_target::{EventFuture, EventStream, EventTarget};

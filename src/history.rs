@@ -8,7 +8,6 @@
 
 use crate::prelude::*;
 
-use futures_channel::oneshot::channel;
 use wasm_bindgen::JsValue;
 
 // use std::cell::RefCell;
@@ -119,12 +118,9 @@ impl History {
     ///
     /// This moves the history cursor forward.
     pub async fn forward(&self) {
-        let (sender, receiver) = channel();
-        let _listener = crate::utils::window().once("popstate", move |_| {
-            sender.send(()).unwrap();
-        });
+        let fut = crate::utils::window().once("popstate");
         self.inner.forward().unwrap_throw();
-        receiver.await.unwrap();
+        fut.await;
     }
 
     // fn len
