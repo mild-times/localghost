@@ -56,7 +56,7 @@ $ cargo add localghost
 ```
 
 ## Safety
-This crate makes use of `unsafe` for dynamic casts between JavaScript classes.
+This crate makes limited use of `unsafe`.
 
 ## Contributing
 Want to join us? Check out our ["Contributing" guide][contributing] and take a
