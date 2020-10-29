@@ -11,7 +11,7 @@ use crate::prelude::*;
 ///
 /// # Examples
 ///
-/// ```
+/// ```ignore
 /// document.on("unload", || {
 ///     let beacon = Beacon::new();
 ///     beacon.send_to("localhost:8080/log", b"client closed");

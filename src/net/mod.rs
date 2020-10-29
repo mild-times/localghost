@@ -10,7 +10,7 @@
 //! #[localghost::main]
 //! async fn main() -> io::Result<()> {
 //!     let res = net::Request::get("https://example.com").send().await?;
-//!     log::info!("responded with {:?}", res.status_code());
+//!     log::info!("responded with {:?}", res.status());
 //!     Ok(())
 //! }
 //! ```

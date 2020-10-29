@@ -13,13 +13,20 @@ use std::task::{Context, Poll};
 /// # Example
 ///
 /// ```no_run
-/// // Create an animator that will loop for 60 frames.
-/// let mut animator = AnimationLoop::new().take(60);
+/// use localghost::task::AnimationLoop;
+/// use localghost::prelude::*;
+/// use async_std::prelude::*;
 ///
-/// let mut counter = 0;
-/// while let Some(frame) in animator.next().await {
-///     println!("frame no {}", counter);
-///     counter += 1;
+/// #[localghost::main]
+/// async fn main() {
+///     // Create an animator that will loop for 60 frames.
+///     let mut animator = AnimationLoop::new().take(60);
+///
+///     let mut counter = 0;
+///     while let Some(frame) = animator.next().await {
+///         println!("frame no {}", counter);
+///         counter += 1;
+///     }
 /// }
 /// ```
 pub struct AnimationLoop {

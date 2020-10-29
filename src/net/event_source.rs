@@ -28,8 +28,8 @@ pub enum ReadyState {
 /// use localghost::dom::{self, Element, ElementKind};
 /// use localghost::prelude::*;
 /// use localghost::net::EventSource;
+/// use async_std::prelude::*;
 ///
-/// use futures::stream::StreamExt;
 /// use std::io;
 ///
 /// #[localghost::main]
