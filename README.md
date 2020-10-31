@@ -36,6 +36,10 @@
 
 <div align="center">
   <h3>
+    <a href="https://mild.zulipchat.com/join/kzqeclaausblt3ixgj5crexf">
+      Chat
+    </a>
+    <span> | </span>
     <a href="https://docs.rs/localghost">
       API Docs
     </a>
