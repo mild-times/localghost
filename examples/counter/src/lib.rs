@@ -18,13 +18,13 @@ async fn main() {
         let mut handle = count_handle.borrow_mut();
         *handle += 1;
         let el = query_selector("#counter").unwrap_throw();
-        el.set_text_content(Some(&format!("{}", *handle)))
+        el.set_text(&format!("{}", *handle))
     });
-    body.append_child(button);
+    body.append(button);
 
     let p = Element::with_text(ElementKind::P, &format!("{}", counter.borrow()));
-    p.set_attribute("id", "counter");
-    body.append_child(p);
+    p.set_attr("id", "counter");
+    body.append(p);
 
     let button = Element::with_text(ElementKind::Button, "-");
     let count_handle = counter.clone();
@@ -32,7 +32,7 @@ async fn main() {
         let mut handle = count_handle.borrow_mut();
         *handle -= 1;
         let el = query_selector("#counter").unwrap_throw();
-        el.set_text_content(Some(&format!("{}", *handle)));
+        el.set_text(&format!("{}", *handle));
     });
-    body.append_child(button);
+    body.append(button);
 }

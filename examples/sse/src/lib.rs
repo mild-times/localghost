@@ -13,20 +13,20 @@ async fn main() -> io::Result<()> {
 
     // Create a table
     let table = Element::new(ElementKind::Table);
-    dom::body().append_child(&table);
+    dom::body().append(&table);
 
     // Create the headings
     let tr = Element::new(ElementKind::Tr);
-    tr.append_child(Element::with_text(ElementKind::Th, "name"));
-    tr.append_child(Element::with_text(ElementKind::Th, "data"));
-    table.append_child(tr);
+    tr.append(Element::with_text(ElementKind::Th, "name"));
+    tr.append(Element::with_text(ElementKind::Th, "data"));
+    table.append(tr);
 
     // For every event in the `EventSource` add an entry to the table.
     while let Some(ev) = sse.next().await.transpose()? {
         let tr = Element::new(ElementKind::Tr);
-        tr.append_child(Element::with_text(ElementKind::Td, ev.name()));
-        tr.append_child(Element::with_text(ElementKind::Td, ev.data()));
-        table.append_child(tr);
+        tr.append(Element::with_text(ElementKind::Td, ev.name()));
+        tr.append(Element::with_text(ElementKind::Td, ev.data()));
+        table.append(tr);
     };
 
     Ok(())

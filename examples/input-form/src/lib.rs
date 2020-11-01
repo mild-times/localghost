@@ -9,18 +9,18 @@ async fn main() {
 
     // Create an `<input>` field
     let input = Element::new(ElementKind::Input);
-    input.set_attribute("type", "text");
-    input.set_attribute("placeholder", "What's your name?");
+    input.set_attr("type", "text");
+    input.set_attr("placeholder", "What's your name?");
     input.on_with("input", |ev| {
         if let Some(target) = ev.target::<web_sys::HtmlInputElement>() {
             let el = query_selector("#text").unwrap_throw();
-            el.set_text_content(Some(&target.value()));
+            el.set_text(&target.value());
         }
     });
-    body.append_child(input);
+    body.append(input);
 
     // Create a `<p>` node to display the form's output.
     let text = Element::new(ElementKind::P);
-    text.set_attribute("id", "text");
-    body.append_child(text);
+    text.set_attr("id", "text");
+    body.append(text);
 }

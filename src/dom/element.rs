@@ -25,7 +25,7 @@ impl Element {
             .create_element(kind.as_str())
             .unwrap_throw();
         let this = Self { kind, el };
-        this.append_child(Text::new(text));
+        this.append(Text::new(text));
         this
     }
 
@@ -35,17 +35,22 @@ impl Element {
     }
 
     /// Append a child element.
-    pub fn append_child<C>(&self, child: C)
+    pub fn append<C>(&self, child: C)
     where
         C: AsRef<web_sys::Node>,
     {
         self.el.append_child(child.as_ref()).unwrap_throw();
     }
 
+    /// Gets the value of an attribute on the specified element.    pub fn set_attr(&self, name: &str, value: &str) {
+    pub fn attr(&self, name: &str) -> Option<String> {
+        self.el.get_attribute(name)
+    }
+
     /// Sets the value of an attribute on the specified element. If the attribute
     /// already exists, the value is updated; otherwise a new attribute is added
     /// with the specified name and value.
-    pub fn set_attribute(&self, name: &str, value: &str) {
+    pub fn set_attr(&self, name: &str, value: &str) {
         self.el.set_attribute(name, value).unwrap_throw();
     }
 
@@ -58,13 +63,18 @@ impl Element {
     }
 
     /// Get the `textContent` field of this object.
-    pub fn text_content(&self) -> Option<String> {
+    pub fn text(&self) -> Option<String> {
         self.el.text_content()
     }
 
     /// Set the `textContent` field of this object.
-    pub fn set_text_content(&self, value: Option<&str>) {
-        self.el.set_text_content(value);
+    pub fn set_text(&self, value: &str) {
+        self.el.set_text_content(Some(value));
+    }
+
+    /// Clear the `textContent` field of this object.
+    pub fn clear_text(&self) {
+        self.el.set_text_content(None);
     }
 }
 

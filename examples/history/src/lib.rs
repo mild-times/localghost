@@ -20,7 +20,7 @@ async fn main() -> io::Result<()> {
             });
         })
         .forget();
-    body.append_child(button);
+    body.append(button);
 
     let button = Element::with_text(ElementKind::Button, "hello");
     button
@@ -31,7 +31,7 @@ async fn main() -> io::Result<()> {
             });
         })
         .forget();
-    body.append_child(button);
+    body.append(button);
 
     let button = Element::with_text(ElementKind::Button, "goodbye");
     button
@@ -42,6 +42,6 @@ async fn main() -> io::Result<()> {
             });
         })
         .forget();
-    body.append_child(button);
+    body.append(button);
     Ok(())
 }
