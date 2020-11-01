@@ -43,6 +43,7 @@ features = [
     "History",
     "HtmlElement",
     "HtmlInputElement",
+    "KeyboardEvent",
     "Navigator",
     "NodeList",
     "ReadableStream",
