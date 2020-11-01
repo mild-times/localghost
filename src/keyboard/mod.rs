@@ -1,5 +1,7 @@
 //! Browser keyboard API
 //!
+//! [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
+//!
 //! # Examples
 //!
 //! ```no_run
@@ -49,7 +51,13 @@ use crate::events::EventStream;
 use crate::prelude::*;
 use crate::utils;
 
+pub use modifier_key::ModifierKey;
+
+mod modifier_key;
+
 /// Browser keyboard API.
+///
+/// [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
 #[derive(Debug)]
 pub struct Keyboard {
     _priv: (),
@@ -63,16 +71,16 @@ impl Keyboard {
 
     /// Create a stream for [`keydown`
     /// events](https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event).
-    pub fn keydown(&self) -> KeydownStream {
-        KeydownStream {
+    pub fn key_down(&self) -> KeyDownStream {
+        KeyDownStream {
             listener: utils::document().on("keydown"),
         }
     }
 
     /// Create a stream for [`keyup`
     /// events](https://developer.mozilla.org/en-US/docs/Web/API/Element/keyup_event).
-    pub fn keyup(&self) -> KeydownStream {
-        KeydownStream {
+    pub fn key_up(&self) -> KeyDownStream {
+        KeyDownStream {
             listener: utils::document().on("keyup"),
         }
     }
@@ -85,27 +93,100 @@ pub struct KeyboardEvent {
 }
 
 impl KeyboardEvent {
-    /// Get the key.
-    pub fn key(&self) -> String {
-        self.inner.key()
+    /// Returns the value of the key pressed by the user, taking into
+    /// consideration the state of modifier keys such as Shift as well as the
+    /// keyboard locale and layout.
+    ///
+    /// [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key)
+    pub fn key(&self) -> KeyKind {
+        let key = self.inner.key();
+        match key.as_str() {
+            "Unidentified" => KeyKind::Unidentified,
+            "Dead" => KeyKind::Dead,
+            _ => KeyKind::Key(key),
+        }
     }
+
+    /// Indicates if the `alt` key (`Option` or `⌥` on macOS) was pressed when
+    /// the event occured.
+    ///
+    /// [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/altKey)
+    pub fn alt_key(&self) -> bool {
+        self.inner.alt_key()
+    }
+
+    /// Indicates if the `control` key was pressed when the event occured.
+    ///
+    /// [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/ctrlKey)
+    pub fn ctrl_key(&self) -> bool {
+        self.inner.ctrl_key()
+    }
+
+    /// Indicates if the `shift` key was pressed when the event occured.
+    ///
+    /// [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/shiftKey)
+    pub fn shift_key(&self) -> bool {
+        self.inner.shift_key()
+    }
+
+    /// Indicates whether the specified key was pressed or locked when the event
+    /// occurred.
+    ///
+    /// [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/getModifierState)
+    pub fn modifier_key(&self, modifier: ModifierKey) -> bool {
+        self.inner.get_modifier_state(modifier.as_str())
+    }
+
+    /// Indicates if the event is fired within a composition session.
+    ///
+    /// [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/isComposing)
+    pub fn is_composing(&self) -> bool {
+        self.inner.is_composing()
+    }
+
+    /// Indicates if the given key is being held down such that it is automatically repeating.
+    ///
+    /// [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/repeat)
+    pub fn is_repeating(&self) -> bool {
+        self.inner.repeat()
+    }
+
+    // TODO: location, init an enum -- https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/location
+    // TODO: key_code, init an enum -- https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
+}
+
+/// The computed `key` value of a `KeyboardEvent`
+///
+/// This `struct` is created by the [`key`] method on [`KeyboardEvent`]. See its
+/// documentation for more.
+///
+/// [`key`]: struct.KeyboardEvent.html#method.key
+/// [`KeyboardEvent`]: struct.KeyboardEvent.html
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub enum KeyKind {
+    /// The printable representation of a key.
+    Key(String),
+    /// The value of the key could not be identified.
+    Unidentified,
+    /// The key is considered a ["dead key"](https://en.wikipedia.org/wiki/Dead_key).
+    Dead,
 }
 
 /// A stream capturing `keydown` events.
 ///
-/// This `struct` is created by the [`keydown`] method on [`Keyboard`]. See its
+/// This `struct` is created by the [`key_down`] method on [`Keyboard`]. See its
 /// documentation for more.
 ///
-/// [`keydown`]: struct.Keyboard.html#method.keydown
+/// [`key_down`]: struct.Keyboard.html#method.key_down
 /// [`Keyboard`]: struct.Keyboard.html
 #[pin_project]
 #[derive(Debug)]
-pub struct KeydownStream {
+pub struct KeyDownStream {
     #[pin]
     listener: EventStream,
 }
 
-impl Stream for KeydownStream {
+impl Stream for KeyDownStream {
     type Item = KeyboardEvent;
 
     fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
@@ -124,19 +205,19 @@ impl Stream for KeydownStream {
 
 /// A stream capturing `keyup` events.
 ///
-/// This `struct` is created by the [`keyup`] method on [`Keyboard`]. See its
+/// This `struct` is created by the [`key_up`] method on [`Keyboard`]. See its
 /// documentation for more.
 ///
-/// [`keyup`]: struct.Keyboard.html#method.keyup
+/// [`key_up`]: struct.Keyboard.html#method.key_up
 /// [`Keyboard`]: struct.Keyboard.html
 #[pin_project]
 #[derive(Debug)]
-pub struct KeyupStream {
+pub struct KeyUpStream {
     #[pin]
     listener: EventStream,
 }
 
-impl Stream for KeyupStream {
+impl Stream for KeyUpStream {
     type Item = KeyboardEvent;
 
     fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
