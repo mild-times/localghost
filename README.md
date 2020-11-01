@@ -8,7 +8,7 @@
 
 <div align="center">
   <strong>
-    Safe Rust bindings to the Web platform.
+    Ergonomic Rust bindings to the Web platform.
   </strong>
 </div>
 

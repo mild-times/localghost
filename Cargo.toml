@@ -2,7 +2,7 @@
 version = "0.0.0"
 authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
 categories = []
-description = "Safe Rust bindings to the Web platform"
+description = "Ergonomic Rust bindings to the Web platform"
 documentation = "https://docs.rs/localghost"
 edition = "2018"
 keywords = []
