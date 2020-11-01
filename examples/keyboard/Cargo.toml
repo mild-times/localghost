@@ -1,0 +1,19 @@
+[package]
+name = "localghost-keyboard"
+version = "0.1.0"
+authors = [
+  "Yoshua Wuyts <yoshuawuyts@gmail.com>",
+]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[features]
+
+[dependencies]
+localghost = { path = "../.." }
+futures = "0.3.0"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.5"
