@@ -18,7 +18,8 @@
 //! #[localghost::main]
 //! async fn main() -> io::Result<()> {
 //!     let res = net::Request::get("https://httpbin.org/uuid").send().await?;
-//!     log::info!("responded with {:?}", res.status());
+//!     log::info!("status: {:?}", res.status());
+//!     log::info!("body: {:?}", res.body_string().await?);
 //!     Ok(())
 //! }
 //! ```
