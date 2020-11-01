@@ -9,26 +9,25 @@
 //! use localghost::prelude::*;
 //! use localghost::keyboard::Keyboard;
 //!
+//! use futures::stream::StreamExt;
+//!
 //! #[localghost::main]
 //! async fn main() {
-//!     // Connect the `Keyboard`.
 //!     let keyboard = Keyboard::new();
+//!     let body = dom::body();
 //!
-//!     // Create a table
-//!     let table = Element::new(ElementKind::Table);
-//!     dom::body().append_child(&table);
+//!     let desc = Element::with_text(ElementKind::P, "Press a key, get a key name");
+//!     body.append_child(desc);
 //!
-//!     // Create the headings
-//!     let tr = Element::new(ElementKind::Tr);
-//!     tr.append_child(Element::with_text(ElementKind::Th, "key name"));
-//!     table.append_child(tr);
+//!     let heading = Element::new(ElementKind::H1);
+//!     heading.set_attribute("id", "target");
+//!     body.append_child(heading);
 //!
-//!     // For every keyboard event add an entry to the table.
-//!     let mut keydown = keyboard.keydown();
+//!     // For every keyboard event modify the heading.
+//!     let mut keydown = keyboard.key_down();
 //!     while let Some(ev) = keydown.next().await {
-//!         let tr = Element::new(ElementKind::Tr);
-//!         tr.append_child(Element::with_text(ElementKind::Td, &ev.key()));
-//!         table.append_child(tr);
+//!         let el = dom::query_selector("#target").unwrap_throw();
+//!         el.set_text_content(Some(ev.key().to_string().as_str()));
 //!     };
 //! }
 //! ```
@@ -51,8 +50,10 @@ use crate::events::EventStream;
 use crate::prelude::*;
 use crate::utils;
 
+pub use key_kind::KeyKind;
 pub use modifier_key::ModifierKey;
 
+mod key_kind;
 mod modifier_key;
 
 /// Browser keyboard API.
@@ -153,23 +154,6 @@ impl KeyboardEvent {
 
     // TODO: location, init an enum -- https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/location
     // TODO: key_code, init an enum -- https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
-}
-
-/// The computed `key` value of a `KeyboardEvent`
-///
-/// This `struct` is created by the [`key`] method on [`KeyboardEvent`]. See its
-/// documentation for more.
-///
-/// [`key`]: struct.KeyboardEvent.html#method.key
-/// [`KeyboardEvent`]: struct.KeyboardEvent.html
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub enum KeyKind {
-    /// The printable representation of a key.
-    Key(String),
-    /// The value of the key could not be identified.
-    Unidentified,
-    /// The key is considered a ["dead key"](https://en.wikipedia.org/wiki/Dead_key).
-    Dead,
 }
 
 /// A stream capturing `keydown` events.
