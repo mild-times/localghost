@@ -14,7 +14,7 @@ repository = "https://github.com/mild-times/localghost"
 [dependencies]
 futures-channel = "0.3.1"
 futures-timer = "3.0.1"
-localghost-macros = { path = "localghost-macros", version = "0.0.0" }
+localghost-macros = { path = "localghost-macros", version = "0.1.0" }
 js-sys = "0.3.35"
 kv-log-macro = "1.0.4"
 log = { version = "0.4.8", features = ["kv_unstable", "std"] }
