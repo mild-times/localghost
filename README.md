@@ -1,16 +1,10 @@
 <!-- <h1 align="center">localghost</h1> -->
 
-<br />
-
 <div align="center">
-  <img src="assets/localghost.png" title="localghost logo" alt="localghost logo very spooky" width="730"/>
+  <img src="assets/localghost_ascii.png" title="localghost logo" alt="localghost logo very spooky" width="730"/>
 </div>
 
-<div align="center">
-  <strong>
-    Ergonomic Rust bindings to the Web platform.
-  </strong>
-</div>
+<h3 align="center">Ergonomic Rust bindings to the Web platform.</h3>
 
 <br />
 
@@ -32,8 +26,6 @@
   </a>
 </div>
 
-<br />
-
 <div align="center">
   <h3>
     <a href="https://mild.zulipchat.com/join/kzqeclaausblt3ixgj5crexf">
@@ -53,6 +45,8 @@
     </a>
   </h3>
 </div>
+
+<br />
 
 ## Installation
 ```sh
