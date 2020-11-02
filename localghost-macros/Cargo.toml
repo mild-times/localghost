@@ -2,7 +2,7 @@
 name = "localghost-macros"
 description = "Macros for localghost"
 license = "MIT OR Apache-2.0"
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
 edition = "2018"
 
