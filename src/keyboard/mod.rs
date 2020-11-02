@@ -9,7 +9,7 @@
 //! use localghost::prelude::*;
 //! use localghost::keyboard::Keyboard;
 //!
-//! use futures::stream::StreamExt;
+//! use async_std::stream::StreamExt;
 //!
 //! #[localghost::main]
 //! async fn main() {
