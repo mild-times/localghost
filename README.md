@@ -44,11 +44,11 @@
       API Docs
     </a>
     <span> | </span>
-    <a href="https://github.com/yoshuawuyts/localghost/releases">
+    <a href="https://github.com/mild-times/localghost/releases">
       Releases
     </a>
     <span> | </span>
-    <a href="https://github.com/yoshuawuyts/localghost/blob/master.github/CONTRIBUTING.md">
+    <a href="https://github.com/mild-times/localghost/blob/master.github/CONTRIBUTING.md">
       Contributing
     </a>
   </h3>
@@ -69,9 +69,9 @@ look at some of these issues:
 - [Issues labeled "good first issue"][good-first-issue]
 - [Issues labeled "help wanted"][help-wanted]
 
-[contributing]: https://github.com/yoshuawuyts/localghost/blob/master.github/CONTRIBUTING.md
-[good-first-issue]: https://github.com/yoshuawuyts/localghost/labels/good%20first%20issue
-[help-wanted]: https://github.com/yoshuawuyts/localghost/labels/help%20wanted
+[contributing]: https://github.com/mild-times/localghost/blob/master.github/CONTRIBUTING.md
+[good-first-issue]: https://github.com/mild-times/localghost/labels/good%20first%20issue
+[help-wanted]: https://github.com/mild-times/localghost/labels/help%20wanted
 
 ## License
 

@@ -1,5 +1,5 @@
 [package]
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
 categories = []
 description = "Ergonomic Rust bindings to the Web platform"
@@ -9,7 +9,7 @@ keywords = []
 license = "MIT OR Apache-2.0"
 name = "localghost"
 readme = "README.md"
-repository = "https://github.com/yoshuawuyts/localghost"
+repository = "https://github.com/mild-times/localghost"
 
 [dependencies]
 futures-channel = "0.3.1"
