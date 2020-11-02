@@ -1,5 +1,5 @@
 [package]
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
 categories = []
 description = "Ergonomic Rust bindings to the Web platform"
