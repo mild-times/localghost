@@ -8,8 +8,9 @@ use std::io;
 #[localghost::main]
 async fn main() -> io::Result<()> {
     // Connect the `EventSource`.
-    let interests = ["fruit"];
-    let mut sse = EventSource::connect("http://localhost:8081/sse", &interests).await?;
+    let url = "https://express-eventsource.herokuapp.com/events";
+    let interests = ["data"];
+    let mut sse = EventSource::connect(url, &interests).await?;
 
     // Create a table
     let table = Element::new(ElementKind::Table);

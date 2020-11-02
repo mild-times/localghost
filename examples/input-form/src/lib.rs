@@ -16,7 +16,7 @@ async fn main() {
             let el = query_selector("#text").unwrap_throw();
             el.set_text(&target.value());
         }
-    });
+    }).forget();
     body.append(input);
 
     // Create a `<p>` node to display the form's output.
