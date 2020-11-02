@@ -32,7 +32,7 @@ jobs:
       uses: actions-rs/cargo@v1
       with:
         command: check
-        args: --all --bins --examples --features hyperium_http
+        args: --all --bins --examples
 
     - name: check unstable
       uses: actions-rs/cargo@v1
