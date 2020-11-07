@@ -1,4 +1,4 @@
-use localghost::dom::{self, Element, ElementKind};
+use localghost::dom::{self, Element};
 use localghost::prelude::*;
 use localghost::keyboard::Keyboard;
 
@@ -9,10 +9,10 @@ async fn main() {
     let keyboard = Keyboard::new();
     let body = dom::body();
 
-    let desc = Element::with_text(ElementKind::P, "Press a key, get a key name");
+    let desc = Element::with_text("p", "Press a key, get a key name");
     body.append(desc);
 
-    let heading = Element::new(ElementKind::H1);
+    let heading = Element::new("h1");
     heading.set_attr("id", "target");
     body.append(heading);
 

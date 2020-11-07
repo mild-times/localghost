@@ -1,8 +1,8 @@
 use localghost::prelude::*;
-use localghost::dom::{self, Element, ElementKind, Text};
+use localghost::dom::{body, Element};
 
 #[localghost::main]
 async fn main() {
-    let p = Element::with_text(ElementKind::P, "Hello world");
-    dom::body().append(p);
+    let el = Element::with_text("p", "Hello world");
+    body().append(el);
 }
