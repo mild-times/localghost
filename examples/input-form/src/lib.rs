@@ -1,4 +1,4 @@
-use localghost::dom::{query_selector, self, Element, ElementKind};
+use localghost::dom::{query_selector, self, Element};
 use localghost::prelude::*;
 use localghost::raw::web_sys;
 
@@ -8,7 +8,7 @@ async fn main() {
     let body = dom::body();
 
     // Create an `<input>` field
-    let input = Element::new(ElementKind::Input);
+    let input = Element::new("input");
     input.set_attr("type", "text");
     input.set_attr("placeholder", "What's your name?");
     input.on_with("input", |ev| {
@@ -20,7 +20,7 @@ async fn main() {
     body.append(input);
 
     // Create a `<p>` node to display the form's output.
-    let text = Element::new(ElementKind::P);
+    let text = Element::new("p");
     text.set_attr("id", "text");
     body.append(text);
 }

@@ -25,7 +25,7 @@ pub enum ReadyState {
 /// # Examples
 ///
 /// ```no_run
-/// use localghost::dom::{self, Element, ElementKind};
+/// use localghost::dom::{self, Element};
 /// use localghost::prelude::*;
 /// use localghost::net::EventSource;
 /// use async_std::prelude::*;
@@ -39,18 +39,18 @@ pub enum ReadyState {
 ///     let mut sse = EventSource::connect("http://localhost:8081/sse", &interests).await?;
 ///
 ///     // Create a table
-///     let table = Element::new(ElementKind::Table);
-///     let tr = Element::new(ElementKind::Tr);
-///     tr.append(Element::with_text(ElementKind::Th, "name"));
-///     tr.append(Element::with_text(ElementKind::Th, "data"));
+///     let table = Element::new("table");
+///     let tr = Element::new("tr");
+///     tr.append(Element::with_text("th", "name"));
+///     tr.append(Element::with_text("th", "data"));
 ///     table.append(tr);
 ///     dom::body().append(&table);
 ///
 ///     // For every event in the `EventSource` add an entry to the table.
 ///     while let Some(ev) = sse.next().await.transpose()? {
-///         let tr = Element::new(ElementKind::Tr);
-///         tr.append(Element::with_text(ElementKind::Td, ev.name()));
-///         tr.append(Element::with_text(ElementKind::Td, ev.data()));
+///         let tr = Element::new("tr");
+///         tr.append(Element::with_text("td", ev.name()));
+///         tr.append(Element::with_text("td", ev.data()));
 ///         table.append(tr);
 ///     };
 ///

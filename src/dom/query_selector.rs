@@ -1,6 +1,4 @@
-use std::str::FromStr;
-
-use crate::dom::{Element, ElementKind};
+use crate::dom::Element;
 use crate::prelude::*;
 
 /// Return the first element that matches the query.
@@ -8,10 +6,7 @@ pub fn query_selector(selectors: &str) -> Option<Element> {
     crate::utils::document()
         .query_selector(selectors)
         .unwrap_throw()
-        .map(|el| {
-            let kind = ElementKind::from_str(&el.tag_name()).unwrap_throw();
-            unsafe { Element::from_raw(kind, el) }
-        })
+        .map(|el| unsafe { Element::from_raw(el.tag_name().clone(), el) })
 }
 
 // TODO: A `Node` is not an `Element`. We need to cast each `Node` into an

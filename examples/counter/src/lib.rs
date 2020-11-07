@@ -1,5 +1,5 @@
 use localghost::prelude::*;
-use localghost::dom::{self, Element, ElementKind, query_selector};
+use localghost::dom::{self, Element, query_selector};
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -12,7 +12,7 @@ async fn main() {
     let counter = Rc::new(RefCell::new(0isize));
     let body = dom::body();
 
-    let button = Element::with_text(ElementKind::Button, "+");
+    let button = Element::with_text("button", "+");
     let count_handle = counter.clone();
     button.on_with("click", move |_| {
         let mut handle = count_handle.borrow_mut();
@@ -22,11 +22,11 @@ async fn main() {
     });
     body.append(button);
 
-    let p = Element::with_text(ElementKind::P, &format!("{}", counter.borrow()));
+    let p = Element::with_text("p", &format!("{}", counter.borrow()));
     p.set_attr("id", "counter");
     body.append(p);
 
-    let button = Element::with_text(ElementKind::Button, "-");
+    let button = Element::with_text("button", "-");
     let count_handle = counter.clone();
     button.on_with("click", move |_| {
         let mut handle = count_handle.borrow_mut();

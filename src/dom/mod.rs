@@ -4,24 +4,22 @@
 //!
 //! ```no_run
 //! use localghost::prelude::*;
-//! use localghost::dom::{self, Element, ElementKind};
+//! use localghost::dom::{body, Element};
 //!
 //! #[localghost::main]
 //! async fn main() {
-//!     let p = Element::with_text(ElementKind::P, "Hello world");
-//!     dom::body().append(p);
+//!     let el = Element::with_text("p", "Hello world");
+//!     body().append(el);
 //! }
 //! ```
 
 // re-exports, temporary only
 pub use element::Element;
-pub use element_kind::ElementKind;
 pub use query_selector::query_selector;
 pub use text::Text;
 pub use window::Window;
 
 mod element;
-mod element_kind;
 mod query_selector;
 mod text;
 mod window;
@@ -34,7 +32,7 @@ pub fn body() -> Element {
         .query_selector("body")
         .expect_throw("Could not find `window.body`")
         .expect_throw("Could not find `window.body`");
-    unsafe { Element::from_raw(ElementKind::Body, el) }
+    unsafe { Element::from_raw("body", el) }
 }
 
 /// Wait for the DOM to be loaded.

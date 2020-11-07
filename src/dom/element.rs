@@ -1,36 +1,48 @@
-use std::str::FromStr;
+use std::borrow::Cow;
 
-use crate::dom::{ElementKind, Text};
+use crate::dom::Text;
 use crate::prelude::*;
 
 /// An HTML element.
 #[derive(Debug)]
 pub struct Element {
-    kind: ElementKind,
+    kind: Cow<'static, str>,
     el: web_sys::Element,
 }
 
 impl Element {
     /// Create a new instance.
-    pub fn new(kind: ElementKind) -> Self {
+    pub fn new<S>(kind: S) -> Self
+    where
+        S: Into<Cow<'static, str>>,
+    {
+        let kind = kind.into();
         let el = crate::utils::document()
-            .create_element(kind.as_str())
+            .create_element(&kind)
             .unwrap_throw();
         Self { kind, el }
     }
 
     /// Create a new instance with an internal text node.
-    pub fn with_text(kind: ElementKind, text: &str) -> Self {
+    pub fn with_text<S>(kind: S, text: &str) -> Self
+    where
+        S: Into<Cow<'static, str>>,
+    {
+        let kind = kind.into();
         let el = crate::utils::document()
-            .create_element(kind.as_str())
+            .create_element(&kind)
             .unwrap_throw();
         let this = Self { kind, el };
         this.append(Text::new(text));
         this
     }
 
-    /// Create a new instance from a `web_sys::Element` and an `ElementKind`.
-    pub unsafe fn from_raw(kind: ElementKind, el: web_sys::Element) -> Self {
+    /// Create a new instance from a `web_sys::Element` and an `&'static str`.
+    pub unsafe fn from_raw<S>(kind: S, el: web_sys::Element) -> Self
+    where
+        S: Into<Cow<'static, str>>,
+    {
+        let kind = kind.into();
         Self { el, kind }
     }
 
@@ -56,10 +68,10 @@ impl Element {
 
     /// Return the first element that matches the query.
     pub fn query_selector(&self, selectors: &str) -> Option<Element> {
-        self.el.query_selector(selectors).unwrap_throw().map(|el| {
-            let kind = ElementKind::from_str(&el.tag_name()).unwrap_throw();
-            unsafe { Element::from_raw(kind, el) }
-        })
+        self.el
+            .query_selector(selectors)
+            .unwrap_throw()
+            .map(|el| unsafe { Element::from_raw(el.tag_name().clone(), el) })
     }
 
     /// Get the `textContent` field of this object.

@@ -1,6 +1,6 @@
 use localghost::prelude::*;
 
-use localghost::dom::{query_selector, self, Element, ElementKind};
+use localghost::dom::{query_selector, self, Element};
 use localghost::log;
 use localghost::task;
 use localghost::History;
@@ -11,7 +11,7 @@ use std::io;
 async fn main() -> io::Result<()> {
     let body = dom::body();
 
-    let button = Element::with_text(ElementKind::Button, "back");
+    let button = Element::with_text("button", "back");
     button
         .on_with("click", move |_| {
             task::spawn_local(async {
@@ -22,7 +22,7 @@ async fn main() -> io::Result<()> {
         .forget();
     body.append(button);
 
-    let button = Element::with_text(ElementKind::Button, "hello");
+    let button = Element::with_text("button", "hello");
     button
         .on_with("click", move |_| {
             task::spawn_local(async {
@@ -33,7 +33,7 @@ async fn main() -> io::Result<()> {
         .forget();
     body.append(button);
 
-    let button = Element::with_text(ElementKind::Button, "goodbye");
+    let button = Element::with_text("button", "goodbye");
     button
         .on_with("click", move |_| {
             task::spawn_local(async {
