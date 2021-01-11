@@ -17,7 +17,7 @@ futures-timer = "3.0.1"
 localghost-macros = { path = "localghost-macros", version = "0.1.0" }
 js-sys = "0.3.35"
 kv-log-macro = "1.0.4"
-log = { version = "0.4.8", features = ["kv_unstable", "std"] }
+log = { version = "0.4.13", features = ["kv_unstable_std"] }
 wasm-bindgen = { version = "0.2.58", features = ["serde-serialize"] }
 wasm-bindgen-futures = "0.4.8"
 wasm-bindgen-test = "0.3.8"
