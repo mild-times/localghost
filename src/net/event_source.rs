@@ -146,7 +146,7 @@ impl EventSource {
     pub fn register(&mut self, name: &str) {
         let sender = self.sender.clone();
         let name2 = name.to_owned();
-        let listener = EventListener::listen(&self.inner, name.clone(), move |ev| {
+        let listener = EventListener::listen(&self.inner, name, move |ev| {
             let ev = MessageEvent::from_event(name2.clone(), ev);
             let _ = sender.try_send(ev);
         });

@@ -46,6 +46,11 @@ impl History {
         self.inner.length().unwrap_throw() as usize
     }
 
+    /// Returns `true` if the History stack contains no items.
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     /// Get the current url from the History stack.
     pub fn current(&self) -> String {
         crate::utils::document()
@@ -129,5 +134,11 @@ impl Stream for History {
             )),
             Poll::Pending => Poll::Pending,
         }
+    }
+}
+
+impl Default for History {
+    fn default() -> Self {
+        Self::new()
     }
 }

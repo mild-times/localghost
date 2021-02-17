@@ -13,3 +13,9 @@ impl Window {
         Self { window }
     }
 }
+
+impl Default for Window {
+    fn default() -> Self {
+        Self::new()
+    }
+}

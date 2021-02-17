@@ -70,3 +70,9 @@ impl fmt::Display for Location {
         write!(f, "{}", self.href())
     }
 }
+
+impl Default for Location {
+    fn default() -> Self {
+        Self::new()
+    }
+}

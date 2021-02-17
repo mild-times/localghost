@@ -114,3 +114,9 @@ fn format_kv_pairs(record: &Record<'_>) -> Option<Object> {
         None => None,
     }
 }
+
+impl Default for Logger {
+    fn default() -> Self {
+        Self::new()
+    }
+}

@@ -102,6 +102,12 @@ impl Builder {
     }
 }
 
+impl Default for Builder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// DOM event listener.
 #[derive(Debug)]
 #[must_use = "Event listener unsubscribes on drop"]

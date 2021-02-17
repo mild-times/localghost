@@ -42,6 +42,12 @@ impl Keyboard {
     }
 }
 
+impl Default for Keyboard {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// A stream capturing `keydown` events.
 ///
 /// This `struct` is created by the [`key_down`] method on [`Keyboard`]. See its

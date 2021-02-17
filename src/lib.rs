@@ -56,6 +56,7 @@
 
 #![deny(missing_debug_implementations, nonstandard_style)]
 #![warn(missing_docs, unreachable_pub, rust_2018_idioms)]
+#![allow(clippy::module_inception)]
 
 pub mod dom;
 pub mod events;

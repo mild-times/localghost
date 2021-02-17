@@ -38,6 +38,10 @@ impl Element {
     }
 
     /// Create a new instance from a `web_sys::Element` and an `&'static str`.
+    ///
+    /// # Safety
+    ///
+    /// The element kind needs to match the element.
     pub unsafe fn from_raw<S>(kind: S, el: web_sys::Element) -> Self
     where
         S: Into<Cow<'static, str>>,

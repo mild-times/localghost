@@ -76,6 +76,12 @@ impl Stream for AnimationLoop {
     }
 }
 
+impl Default for AnimationLoop {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Debug for AnimationLoop {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("AnimationLoop").finish()
