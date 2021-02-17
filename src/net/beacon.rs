@@ -34,7 +34,7 @@ impl Beacon {
 
     /// Send data to the beacon's url.
     pub fn send(&self, data: &mut [u8]) {
-        if data.len() > 0 {
+        if !data.is_empty() {
             self.nav
                 .send_beacon_with_opt_u8_array(&self.url, Some(data))
                 .unwrap_throw();

@@ -71,7 +71,7 @@ impl Element {
         self.el
             .query_selector(selectors)
             .unwrap_throw()
-            .map(|el| unsafe { Element::from_raw(el.tag_name().clone(), el) })
+            .map(|el| unsafe { Element::from_raw(el.tag_name(), el) })
     }
 
     /// Get the `textContent` field of this object.

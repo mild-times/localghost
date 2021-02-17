@@ -44,7 +44,7 @@ impl Builder {
         F: FnMut(Event) + Clone + 'static,
     {
         let target = target.as_ref();
-        let mut f = f.clone();
+        let mut f = f;
         let f =
             Closure::wrap(Box::new(move |ev| f(Event::new(ev))) as Box<dyn FnMut(web_sys::Event)>);
         let event_type = event_type.to_owned();

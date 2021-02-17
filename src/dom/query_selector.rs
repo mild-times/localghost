@@ -6,7 +6,7 @@ pub fn query_selector(selectors: &str) -> Option<Element> {
     crate::utils::document()
         .query_selector(selectors)
         .unwrap_throw()
-        .map(|el| unsafe { Element::from_raw(el.tag_name().clone(), el) })
+        .map(|el| unsafe { Element::from_raw(el.tag_name(), el) })
 }
 
 // TODO: A `Node` is not an `Element`. We need to cast each `Node` into an

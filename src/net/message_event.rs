@@ -53,7 +53,7 @@ impl MessageEvent {
         let data: js_sys::JsString = ev.data().into();
         let data: String = data.into();
         Self {
-            name: name.to_owned(),
+            name,
             data,
             id,
         }

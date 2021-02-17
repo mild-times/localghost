@@ -51,8 +51,8 @@ impl Iterator for HeadersIter {
         let value = Reflect::get(&vals.next().unwrap(), &prop).unwrap();
 
         Some((
-            key.as_string().to_owned().unwrap(),
-            value.as_string().to_owned().unwrap(),
+            key.as_string().unwrap(),
+            value.as_string().unwrap(),
         ))
     }
 }

@@ -97,7 +97,7 @@ impl EventSource {
         let reconnect2 = reconnect.clone();
         let err_listener = inner.on_with("error", move |_| {
             crate::log::debug!("EventSource({}): remote closed", url2);
-            if reconnect2.load(Ordering::SeqCst) == false {
+            if !reconnect2.load(Ordering::SeqCst) {
                 crate::log::debug!("EventSource({}): instance closed", url2);
                 inner2.close();
             } else {
