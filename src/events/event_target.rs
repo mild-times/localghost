@@ -7,7 +7,7 @@ use crate::events::{Event, EventListener};
 use crate::prelude::*;
 
 use async_channel::{bounded, Receiver};
-use async_std::{prelude::Stream, task::ready};
+use futures_core::{ready, Stream};
 use pin_project::pin_project;
 
 /// A type that can register event listeners.

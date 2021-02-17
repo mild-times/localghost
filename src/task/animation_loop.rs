@@ -1,5 +1,5 @@
-use async_std::stream::Stream;
 use futures_channel::oneshot::{channel, Receiver};
+use futures_core::Stream;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 

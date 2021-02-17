@@ -1,8 +1,7 @@
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use async_std::stream::Stream;
-use async_std::task;
+use futures_core::{ready, Stream};
 use pin_project::pin_project;
 use wasm_bindgen::JsCast;
 
@@ -67,7 +66,7 @@ impl Stream for KeyDownStream {
 
     fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
         let this = self.project();
-        let ev = task::ready!(this.listener.poll_next(cx));
+        let ev = ready!(this.listener.poll_next(cx));
         let ev = ev.map(|ev| {
             let inner = ev
                 .into_raw()
@@ -98,7 +97,7 @@ impl Stream for KeyUpStream {
 
     fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
         let this = self.project();
-        let ev = task::ready!(this.listener.poll_next(cx));
+        let ev = ready!(this.listener.poll_next(cx));
         let ev = ev.map(|ev| {
             let inner = ev
                 .into_raw()

@@ -4,6 +4,7 @@ use crate::prelude::*;
 use crate::utils::ResultExt;
 
 use async_channel::{self as channel, Receiver, Sender};
+use futures_core::Stream;
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
@@ -203,7 +204,7 @@ impl AsRef<web_sys::EventTarget> for EventSource {
     }
 }
 
-impl async_std::stream::Stream for EventSource {
+impl Stream for EventSource {
     type Item = io::Result<MessageEvent>;
 
     fn poll_next(

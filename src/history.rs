@@ -11,7 +11,7 @@ use std::task::{Context, Poll};
 
 use crate::prelude::*;
 
-use async_std::prelude::Stream;
+use futures_core::Stream;
 use pin_project::pin_project;
 use wasm_bindgen::JsValue;
 
