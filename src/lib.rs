@@ -26,7 +26,7 @@
 //!
 //! For more examples see the [examples] directory.
 //!
-//! [examples]: https://github.com/yoshuawuyts/mild/tree/master/examples
+//! [examples]: https://github.com/mild-times/localghost/tree/main/examples
 //!
 //! # Getting started
 //!
