@@ -27,6 +27,13 @@ wasm-bindgen = { version = "0.2.70", features = ["serde-serialize"] }
 wasm-bindgen-futures = "0.4.20"
 wasm-bindgen-test = "0.3.20"
 
+
+[features]
+default = [
+    "task-idle"
+]
+task-idle = ["web-sys/IdleDeadline", "web-sys/Window"]
+
 [dependencies.web-sys]
 version = "0.3.47"
 features = [
@@ -57,5 +64,3 @@ features = [
 
 [dev-dependencies]
 async-std = { version = "1.9.0", features = ["unstable"] }
-
-[features]

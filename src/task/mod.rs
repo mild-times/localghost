@@ -1,7 +1,11 @@
 //! Types and traits for working with asynchronous tasks.
 
-mod animation_loop;
-mod spawn;
+mod animation_frame;
+#[cfg(feature = "task-idle")]
+mod idle;
+mod spawn_local;
 
-pub use animation_loop::AnimationLoop;
-pub use spawn::{spawn_local, JoinHandle};
+pub use animation_frame::AnimationFrame;
+#[cfg(feature = "task-idle")]
+pub use idle::Idle;
+pub use spawn_local::{spawn_local, JoinHandle};

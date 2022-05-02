@@ -1,12 +1,12 @@
 use std::sync::{Arc, Mutex};
 use wasm_bindgen_test::*;
 
-use localghost::task::AnimationLoop;
+use localghost::task::AnimationFrame;
 
 #[wasm_bindgen_test]
 async fn animation_loop() {
     let count = Arc::new(Mutex::new(0_u8));
-    let mut animator = AnimationLoop::new(|count: Arc<Mutex<u8>>| async move {
+    let mut animator = AnimationFrame::new(|count: Arc<Mutex<u8>>| async move {
         *count.lock().unwrap() += 1;
     });
 

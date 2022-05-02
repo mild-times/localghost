@@ -8,19 +8,21 @@ use std::future::Future;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-/// An animation frame loop.
+/// Perform work during a browser's idle period.
+///
+/// [Read more](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback)
 ///
 /// # Example
 ///
 /// ```no_run
-/// use localghost::task::AnimationLoop;
+/// use localghost::task::Idle;
 /// use localghost::prelude::*;
 /// use async_std::prelude::*;
 ///
 /// #[localghost::main]
 /// async fn main() {
 ///     // Create an animator that will loop for 60 frames.
-///     let mut animator = AnimationLoop::new().take(60);
+///     let mut animator = Idle::new().take(60);
 ///
 ///     let mut counter = 0;
 ///     while let Some(frame) = animator.next().await {
@@ -29,14 +31,14 @@ use std::task::{Context, Poll};
 ///     }
 /// }
 /// ```
-pub struct AnimationLoop {
+pub struct Idle {
     receiver: Option<Receiver<()>>,
     f: Option<Closure<dyn std::ops::FnMut()>>,
-    id: Option<i32>,
+    id: Option<u32>,
 }
 
-impl AnimationLoop {
-    /// Create a new instance of `AnimationLoop`.
+impl Idle {
+    /// Create a new instance of `Idle`.
     pub fn new() -> Self {
         Self {
             receiver: None,
@@ -46,7 +48,7 @@ impl AnimationLoop {
     }
 }
 
-impl Stream for AnimationLoop {
+impl Stream for Idle {
     type Item = ();
     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
         if self.receiver.is_none() {
@@ -54,7 +56,7 @@ impl Stream for AnimationLoop {
             let (sender, receiver) = channel();
             let f = Closure::once(move || sender.send(()).unwrap_throw());
             let id = window
-                .request_animation_frame(f.as_ref().unchecked_ref())
+                .request_idle_callback(f.as_ref().unchecked_ref())
                 .unwrap_throw();
 
             // store the closure so it isn't dropped.
@@ -71,29 +73,27 @@ impl Stream for AnimationLoop {
                 self.id = None;
                 Poll::Ready(Some(()))
             }
-            Poll::Ready(Err(_)) => panic!("error in AnimationLoop"),
+            Poll::Ready(Err(_)) => panic!("error in Idle"),
         }
     }
 }
 
-impl Default for AnimationLoop {
+impl Default for Idle {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl Debug for AnimationLoop {
+impl Debug for Idle {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("AnimationLoop").finish()
+        f.debug_struct("Idle").finish()
     }
 }
 
-impl Drop for AnimationLoop {
+impl Drop for Idle {
     fn drop(&mut self) {
         if let Some(id) = self.id {
-            crate::utils::window()
-                .cancel_animation_frame(id)
-                .unwrap_throw();
+            crate::utils::window().cancel_idle_callback(id);
         }
     }
 }
