@@ -4,7 +4,7 @@ authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
 categories = []
 description = "Ergonomic Rust bindings to the Web platform"
 documentation = "https://docs.rs/localghost"
-edition = "2018"
+edition = "2021"
 keywords = []
 license = "MIT OR Apache-2.0"
 name = "localghost"
@@ -43,6 +43,7 @@ features = [
     "HtmlElement",
     "HtmlInputElement",
     "KeyboardEvent",
+    "MessageEvent",
     "Navigator",
     "NodeList",
     "ReadableStream",
