@@ -31,7 +31,7 @@ use std::task::{Context, Poll};
 /// ```
 pub struct AnimationFrame {
     receiver: Option<Receiver<()>>,
-    f: Option<Closure<dyn std::ops::FnMut()>>,
+    f: Option<Closure<dyn std::ops::FnMut(f64)>>,
     id: Option<i32>,
 }
 
@@ -52,7 +52,7 @@ impl Stream for AnimationFrame {
         if self.receiver.is_none() {
             let window = crate::utils::window();
             let (sender, receiver) = channel();
-            let f = Closure::once(move || sender.send(()).unwrap_throw());
+            let f = Closure::once(move |_timestamp| sender.send(()).unwrap_throw());
             let id = window
                 .request_animation_frame(f.as_ref().unchecked_ref())
                 .unwrap_throw();

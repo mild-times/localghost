@@ -32,7 +32,11 @@ wasm-bindgen-test = "0.3.20"
 default = [
     "task-idle"
 ]
-task-idle = ["web-sys/IdleDeadline", "web-sys/Window"]
+task-idle = [
+    "web-sys/Window",
+    "web-sys/IdleDeadline",
+    "web-sys/IdleRequestOptions"
+]
 
 [dependencies.web-sys]
 version = "0.3.47"
