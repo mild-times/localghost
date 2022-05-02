@@ -159,7 +159,7 @@ impl EventSource {
         let res = self.receiver.recv().await.map_err(|_| {
             io::Error::new(
                 io::ErrorKind::Other,
-                format!("EventSource({}): receiver error", self.url).as_ref(),
+                format!("EventSource({}): receiver error", self.url),
             )
         })?;
         // TODO: race with the error channel here.
